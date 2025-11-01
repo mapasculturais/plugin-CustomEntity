@@ -32,10 +32,7 @@ class EntityCreator
 
     function generateHash()
     {
-        $class_content = file_get_contents(__DIR__ . '/ENTITY_TEMPLATE.php');
-        $string = $this->slug . ':' . json_encode($this->config->uses) . ':' . $class_content;
-
-        return md5($string);
+        return md5($this->renderEntityClass());
     }
 
     function getUpdatedFlagFilename(): string
@@ -82,12 +79,12 @@ class EntityCreator
 
         $traits = array_map(fn($trait) => str_replace('MapasCulturais\Traits', 'CoreTraits', $trait), $traits);
 
-        return $traits;
+        return array_reverse($traits);
     }
 
     function renderTemplate(string $filename): string
     {
-        $content = file_get_contents(__DIR__ . '/' . $filename);
+        $content = file_get_contents(__DIR__ . '/templates/' . $filename);
 
         $content = str_replace('ENTITY_TEMPLATE', $this->entityName, $content);
         $content = str_replace('entity_table', $this->table, $content);
@@ -95,23 +92,29 @@ class EntityCreator
         return $content;
     }
 
-    function create(): string
+    function renderEntityClass(): string
     {
-        if ($this->isUpdated()) {
-            return $this->filename;
-        }
-        $class_content = $this->renderTemplate('ENTITY_TEMPLATE.php');
+        $class_content = $this->renderTemplate('Entity.php');
 
         foreach ($this->getTraits() as $trait) {
             $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
             $class_content = str_replace('/** TRAITS **/', "/** TRAITS **/\n    use $trait;", $class_content);
         }
 
+        return $class_content;
+    }
+
+    function create(): string
+    {
+        if ($this->isUpdated()) {
+            return $this->filename;
+        }
+        
         Plugin::log("Atualizando arquivo da entidade $this->entityName");
 
-        file_put_contents($this->filename, $class_content);
+        file_put_contents($this->filename, $this->renderEntityClass());
 
-        $pcache_class_content = $this->renderTemplate('ENTITY_TEMPLATEPermissionCache.php');
+        $pcache_class_content = $this->renderTemplate('EntityPermissionCache.php');
         file_put_contents(self::ENTITIES_PATH . "{$this->entityName}PermissionCache.php", $pcache_class_content);
 
         return $this->filename;
