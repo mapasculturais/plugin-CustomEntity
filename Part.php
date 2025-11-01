@@ -22,12 +22,12 @@ abstract class Part
 
     protected $isRequired = false;
 
-    static function create(): self
+    static function create(): static
     {
-        return new self;
+        return new static;
     }
 
-    function required(): self
+    function required(): static
     {
         $this->isRequired = true;
         return $this;

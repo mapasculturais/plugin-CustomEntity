@@ -4,15 +4,16 @@ namespace CustomEntity\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use MapasCulturais\Entity;
-use MapasCulturais\Traits\EntityPermissionCache;
+use MapasCulturais\Traits as CoreTraits;
+use CustomEntity\Traits as Traits;
 
 #[ORM\Table(name: "entity_table")]
-#[ORM\Entity(repositoryClass: "MapasCulturais\Repositories\Agent")]
+#[ORM\Entity(repositoryClass: "MapasCulturais\Repository")]
 #[ORM\HasLifecycleCallbacks]
 class ENTITY_TEMPLATE extends Entity
 {
-    use EntityPermissionCache;
     /** TRAITS **/
+    use CoreTraits\EntityPermissionCache;
 
     #[ORM\Column(name: "id", type: "integer", nullable: false)]
     #[ORM\Id]
