@@ -5,9 +5,9 @@ use Doctrine\ORM\Mapping as ORM;
 use MapasCulturais\Entities\PermissionCache;
 
 #[ORM\Entity(repositoryClass: "MapasCulturais\Repository")]
-class ENTITY_TEMPLATEPermissionCache extends PermissionCache {
+class _ENTITY_NAME_PermissionCache extends PermissionCache {
 
-    #[ORM\ManyToOne(targetEntity: "CustomEntity\Entities\ENTITY_TEMPLATE")]
+    #[ORM\ManyToOne(targetEntity: "CustomEntity\Entities\_ENTITY_NAME_")]
     #[ORM\JoinColumn(name: "object_id", referencedColumnName: "id", onDelete: "CASCADE")]
     protected $owner;
 }

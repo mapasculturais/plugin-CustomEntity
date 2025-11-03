@@ -4,7 +4,7 @@ namespace CustomEntity;
 
 use MapasCulturais\App;
 
-class EntityCreator
+class EntityGenerator
 {
     const FLAGS_PATH = PRIVATE_FILES_PATH . "CustomEntity/";
     const ENTITIES_PATH = __DIR__ . "/Entities/";
@@ -37,7 +37,7 @@ class EntityCreator
 
     function getUpdatedFlagFilename(): string
     {
-        return self::FLAGS_PATH . "{$this->slug}.hash";
+        return self::FLAGS_PATH . "entity.{$this->slug}.hash";
     }
 
     function flagAsUpdated()
@@ -68,13 +68,25 @@ class EntityCreator
         return $saved_hash == $actual_hash;
     }
 
+    function getPartTraits(Part $part): array
+    {
+        $traits = $part->entityTraits;
+
+        foreach($part->subParts as $subpart) {
+            $traits = array_merge($traits, $this->getPartTraits($subpart));
+        }
+
+        return array_unique($traits);
+    }
+
     function getTraits(): array
     {
         $traits = [];
         foreach ($this->config->parts as $part) {
             /** @var Part $part */
-            $traits = array_merge($traits, $part->entityTraits);
+            $traits = array_merge($traits, $this->getPartTraits($part));
         }
+        
         $traits = array_unique($traits);
 
         $traits = array_map(fn($trait) => str_replace('MapasCulturais\Traits', 'CoreTraits', $trait), $traits);
@@ -86,8 +98,8 @@ class EntityCreator
     {
         $content = file_get_contents(__DIR__ . '/templates/' . $filename);
 
-        $content = str_replace('ENTITY_TEMPLATE', $this->entityName, $content);
-        $content = str_replace('entity_table', $this->table, $content);
+        $content = str_replace('_ENTITY_NAME_', $this->entityName, $content);
+        $content = str_replace('_ENTITY_TABLE_', $this->table, $content);
 
         return $content;
     }

@@ -9,38 +9,19 @@ use MapasCulturais\App;
 class Plugin extends MapasCulturaisPlugin
 {
     const DOCTRINE_TOOL = APPLICATION_PATH . "tools/doctrine";
-    
+
     protected array $entities = [];
 
     public function __construct(array $config = [])
     {
         $entities_config = [];
-        
+
         foreach ($config['entities']() as $entity_slug => $entity_config) {
             $entity_config = (object) $entity_config;
             $entities_config[$entity_slug] = $this->parseEntityConfig($entity_slug, $entity_config);
         }
 
         parent::__construct($entities_config);
-
-        $app = App::i();
-
-        // para evitar loop infinito na atualização do scheme das entidades
-        if ($_SERVER['SCRIPT_FILENAME'] == self::DOCTRINE_TOOL) {
-            return;
-        }
-
-        foreach ($entities_config as $entity_slug => $entity_config) {
-            $this->registerEntity($entity_slug);
-        }
-
-        foreach ($this->entities as $entity_slug => $config) {
-            $config->entityCreator->create();
-        }
-
-        $this->updateScheme();
-
-        $this->flagEntitiesAsUpdated();
     }
 
     static function log(string $message)
@@ -52,7 +33,33 @@ class Plugin extends MapasCulturaisPlugin
 
     public function _init()
     {
-        // eval(\psy\sh());
+        $app = App::i();
+
+        // para evitar loop infinito na atualização do scheme das entidades
+        if ($_SERVER['SCRIPT_FILENAME'] == self::DOCTRINE_TOOL) {
+            return;
+        }
+
+        foreach (array_keys($this->config) as $entity_slug) {
+            $this->registerEntity($entity_slug);
+        }
+
+        foreach ($this->entities as $entity_slug => $config) {
+            $config->entity->create();
+            $config->controller->create();
+        }
+
+        $this->updateScheme();
+
+        $this->flagEntitiesAsUpdated();
+
+        foreach ($this->entities as $slug => $config) {
+            /** @var ControllerGenerator */
+            $controller_config = $config->controller;
+
+            // register controller
+            $app->registerController($slug, $controller_config->className, view_dir: 'custom-entity');
+        }
     }
 
     public function register() {}
@@ -83,7 +90,8 @@ class Plugin extends MapasCulturaisPlugin
     protected function flagEntitiesAsUpdated()
     {
         foreach ($this->entities as $entity_slug => $config) {
-            $config->entityCreator->flagAsUpdated();
+            $config->entity->flagAsUpdated();
+            $config->controller->flagAsUpdated();
         }
     }
 
@@ -92,20 +100,15 @@ class Plugin extends MapasCulturaisPlugin
         $entity_config = $this->getEntityConfig($entity_slug);
 
         $this->entities[$entity_slug] = (object) [
-            'entityCreator' => new EntityCreator($entity_slug, $entity_config),
-            // 'controllerCreator' => new ControllerCreator($entity_slug, $entity_config),
+            'entity' => new EntityGenerator($entity_slug, $entity_config),
+            'controller' => new ControllerGenerator($entity_slug, $entity_config),
         ];
-    }
-
-    protected function createEntity($entity_slug): string
-    {
-        
     }
 
     public function updateScheme()
     {
         foreach ($this->entities as $entity_slug => $config) {
-            $config->entityCreator->updateScheme();
+            $config->entity->updateScheme();
         }
     }
 }
