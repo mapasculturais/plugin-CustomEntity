@@ -53,12 +53,17 @@ class Plugin extends MapasCulturaisPlugin
 
         $this->flagEntitiesAsUpdated();
 
-        foreach ($this->entities as $slug => $config) {
+        foreach ($this->entities as $entity_slug => $config) {
+            /** @var EntityGenerator */
+            $entity_generator = $config->entity;
+
             /** @var ControllerGenerator */
-            $controller_config = $config->controller;
+            $controller_generator = $config->controller;
 
             // register controller
-            $app->registerController($slug, $controller_config->className, view_dir: 'custom-entity');
+            $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
+
+            $this->addEntityDescriptionToJs($entity_slug, $entity_generator);
         }
     }
 
@@ -87,7 +92,7 @@ class Plugin extends MapasCulturaisPlugin
         return $this->config[$entity_slug];
     }
 
-    protected function flagEntitiesAsUpdated()
+    protected function flagEntitiesAsUpdated(): void
     {
         foreach ($this->entities as $entity_slug => $config) {
             $config->entity->flagAsUpdated();
@@ -95,7 +100,7 @@ class Plugin extends MapasCulturaisPlugin
         }
     }
 
-    protected function registerEntity(string $entity_slug)
+    protected function registerEntity(string $entity_slug): void
     {
         $entity_config = $this->getEntityConfig($entity_slug);
 
@@ -105,10 +110,22 @@ class Plugin extends MapasCulturaisPlugin
         ];
     }
 
-    public function updateScheme()
+    public function updateScheme(): void
     {
         foreach ($this->entities as $entity_slug => $config) {
             $config->entity->updateScheme();
         }
+    }
+
+    public function addEntityDescriptionToJs(string $entity_slug, EntityGenerator $generator): void {
+        $app = App::i();
+
+        $app->hook('mapas.printJsObject:before', function () use($entity_slug, $generator) {
+            /** @var \MapasCulturais\Themes\BaseV2\Theme */
+            $entity_class = $generator->className;
+            
+            $this->jsObject['EntitiesDescription'][$entity_slug] = $entity_class::getPropertiesMetadata();
+        });
+
     }
 }
