@@ -9,6 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 trait EntityName
 {
-  #[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
-  protected $name;
+    #[ORM\Column(name: "name", type: "string", length: 255, nullable: false)]
+    protected $name;
 }

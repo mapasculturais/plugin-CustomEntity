@@ -10,6 +10,7 @@ use CustomEntity\Traits as Traits;
 #[ORM\Table(name: "_ENTITY_TABLE_")]
 #[ORM\Entity(repositoryClass: "MapasCulturais\Repository")]
 #[ORM\HasLifecycleCallbacks]
+
 class _ENTITY_NAME_ extends Entity
 {
     /** TRAITS **/
