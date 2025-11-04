@@ -2,6 +2,7 @@
 
 namespace CustomEntity\Entities;
 
+use CustomEntity\Plugin;
 use Doctrine\ORM\Mapping as ORM;
 use MapasCulturais\Entity;
 use MapasCulturais\Traits as CoreTraits;
@@ -48,4 +49,13 @@ class _ENTITY_NAME_ extends Entity
         options: ['default' => self::STATUS_ENABLED],
     )]
     protected $status = self::STATUS_ENABLED;
+
+    static function getValidations() {
+        $plugin = Plugin::$intance;
+
+        $definition = $plugin->config['_ENTITY_SLUG_'];
+
+        return $definition->getValidations();
+    }
+
 }

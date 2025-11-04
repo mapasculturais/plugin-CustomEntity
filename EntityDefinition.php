@@ -41,6 +41,7 @@ class EntityDefinition
 
         $content = str_replace('_ENTITY_NAME_', $this->entity, $content);
         $content = str_replace('_ENTITY_TABLE_', $this->table, $content);
+        $content = str_replace('_ENTITY_SLUG_', $this->slug, $content);
 
         foreach ($traits as $trait) {
             $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
@@ -64,6 +65,23 @@ class EntityDefinition
         return $parts;
     }
 
+    function getValidations(): array
+    {
+        $validations = [];
+
+        foreach($this->getParts() as $part) {
+            foreach($part->getEntityValidations() as $prop => $property_validations) {
+                if(isset($validations[$prop])) {
+                    $validations[$prop] = array_merge($validations[$prop], $property_validations);
+                } else {
+                    $validations[$prop] = $property_validations;
+                }
+            }
+        }
+
+        return $validations;
+    }
+
     /**
      * @return FileGroup[]
      */
@@ -83,4 +101,6 @@ class EntityDefinition
         $sections = [];
         // foreach($this->entityGenerator)
     }
+
+
 }

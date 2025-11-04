@@ -45,10 +45,12 @@ abstract class Part
     {
         return [];
     }
+
     public function getEntityValidations(): array
     {
         return [];
     }
+    
     public function getEntityMetadata(): array
     {
         return [];
