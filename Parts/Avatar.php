@@ -3,7 +3,6 @@
 namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
-use CustomEntity\EntityGenerator;
 use CustomEntity\Part;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\FileGroup;
@@ -13,18 +12,17 @@ use MapasCulturais\Traits;
 
 class Avatar extends Part
 {
-    public function getEntityTraits(): array
+    public function getSubParts(): array
     {
         return [
-            Traits\EntityAvatar::class,
-            Traits\EntityFiles::class
+            Files::create()
         ];
     }
 
-    public function getControllerTraits(): array
+    public function getEntityTraits(): array
     {
         return [
-            Traits\ControllerUploads::class
+            Traits\EntityAvatar::class
         ];
     }
 
@@ -33,10 +31,6 @@ class Avatar extends Part
         return [
             new FileGroup('avatar', ['^image/(jpeg|png)$'], i::__('O arquivo enviado não é uma imagem válida.'), true),
         ];
-    }
-    
-    public function generateFiles(EntityGenerator $generator): void {
-        $generator->renderFile('EntityFile.php');
     }
 
     public function init(EntityDefinition $entity_definition)
