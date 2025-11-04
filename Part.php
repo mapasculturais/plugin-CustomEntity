@@ -33,6 +33,9 @@ abstract class Part
         return $this;
     }
 
+    /**
+     * @return Part[]
+     */
     public function getSubParts(): array
     {
         return [];
@@ -60,6 +63,8 @@ abstract class Part
     {
         return [];
     }
+
+    public function generateFiles(EntityGenerator $generator): void {}
 
     public function register() {}
     public function init() {}
