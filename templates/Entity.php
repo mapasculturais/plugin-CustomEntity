@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use MapasCulturais\Entity;
 use MapasCulturais\Traits as CoreTraits;
 use CustomEntity\Traits as Traits;
+use MapasCulturais\App;
 
 #[ORM\Table(name: "_ENTITY_TABLE_")]
 #[ORM\Entity(repositoryClass: "MapasCulturais\Repository")]
@@ -51,11 +52,17 @@ class _ENTITY_NAME_ extends Entity
     protected $status = self::STATUS_ENABLED;
 
     static function getValidations() {
+        $app = App::i();
         $plugin = Plugin::$intance;
 
         $definition = $plugin->config['_ENTITY_SLUG_'];
 
-        return $definition->getValidations();
+        $validations = $definition->getValidations();
+
+        $prefix = self::getHookPrefix();
+        $app->applyHook("{$prefix}::validations", [&$validations]);
+
+        return $validations;
     }
 
 }
