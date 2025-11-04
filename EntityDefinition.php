@@ -2,6 +2,9 @@
 
 namespace CustomEntity;
 
+use MapasCulturais\App;
+use MapasCulturais\Definitions\FileGroup;
+
 class EntityDefinition
 {
     public readonly EntityGenerator $entityGenerator;
@@ -20,7 +23,18 @@ class EntityDefinition
         $this->controllerGenerator = new ControllerGenerator($this);
     }
 
-    
+    function init()
+    {
+        foreach ($this->getParts() as $part) {
+            $part->init($this);
+        }
+
+        $app = App::i();
+        foreach($this->getFileGroups() as $group) {
+            $app->registerFileGroup($this->slug, $group);
+        }
+    }
+
     function renderTemplate(string $filename, array $traits = []): string
     {
         $content = file_get_contents(__DIR__ . '/templates/' . $filename);
@@ -32,7 +46,7 @@ class EntityDefinition
             $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
             $content = str_replace('/** TRAITS **/', "/** TRAITS **/\n    use $trait;", $content);
         }
-        
+
         return $content;
     }
 
@@ -42,12 +56,26 @@ class EntityDefinition
     function getParts(?Part $parent = null): array
     {
         $parts = $parent ? $parent->getSubParts() : $this->parts;
-        
+
         foreach ($parts as $part) {
             $parts = array_merge($parts, $part->getSubParts());
         }
-        
+
         return $parts;
+    }
+
+    /**
+     * @return FileGroup[]
+     */
+    function getFileGroups(): array
+    {
+        $file_groups = [];
+
+        foreach($this->getParts() as $part) {
+            $file_groups = array_merge($file_groups, $part->getFileGroups());
+        }
+
+        return $file_groups;
     }
 
     public function getSingleSections(): array

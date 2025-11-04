@@ -21,7 +21,7 @@ class Plugin extends MapasCulturaisPlugin
     public function __construct(array $config = [])
     {
         self::$intance = $this;
-        
+
         $entities_config = [];
         foreach ($config['entities']() as $entity_definition) {
             /** @var EntityDefinition $entity_definition */
@@ -64,6 +64,10 @@ class Plugin extends MapasCulturaisPlugin
             $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
 
             $this->addEntityDescriptionToJs($entity_slug, $entity_generator);
+        }
+
+        foreach ($this->config as $config) {
+            $config->init();
         }
     }
 

@@ -88,9 +88,7 @@ class ControllerGenerator
     {
         $class_content = $this->entityDefinition->renderTemplate($filename, $traits);
         
-        $destination_filename = preg_replace('#^Entity#', $this->entityName, $filename);
-        
-        file_put_contents(self::CONTROLLERS_PATH . "{$destination_filename}", $class_content);
+        file_put_contents(self::CONTROLLERS_PATH . "{$this->entityName}.php", $class_content);
     }
 
     function create(): string
