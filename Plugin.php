@@ -13,16 +13,16 @@ use MapasCulturais\Traits\Singleton;
  */
 class Plugin extends MapasCulturaisPlugin
 {
-    use Singleton;
-
     const DOCTRINE_TOOL = APPLICATION_PATH . "tools/doctrine";
+    public static self $intance;
 
     protected array $entities = [];
 
     public function __construct(array $config = [])
     {
+        self::$intance = $this;
+        
         $entities_config = [];
-
         foreach ($config['entities']() as $entity_definition) {
             /** @var EntityDefinition $entity_definition */
             $entities_config[$entity_definition->slug] = $entity_definition;
@@ -57,10 +57,7 @@ class Plugin extends MapasCulturaisPlugin
         $this->flagEntitiesAsUpdated();
 
         foreach ($this->config as $entity_slug => $config) {
-            /** @var EntityGenerator */
             $entity_generator = $config->entityGenerator;
-
-            /** @var ControllerGenerator */
             $controller_generator = $config->controllerGenerator;
 
             // register controller
