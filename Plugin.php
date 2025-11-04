@@ -98,6 +98,15 @@ class Plugin extends MapasCulturaisPlugin
             
             $this->jsObject['EntitiesDescription'][$entity_slug] = $entity_class::getPropertiesMetadata();
         });
+    }
 
+    static function getEntityDefinition(?string $entity_slug = null): ?EntityDefinition
+    {
+        if(is_null($entity_slug)) {
+            $app = App::i();
+            $entity_slug = $app->view->controller->id;
+        }
+
+        return self::i()->config[$entity_slug] ?? null;
     }
 }
