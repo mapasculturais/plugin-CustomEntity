@@ -33,7 +33,7 @@ class ControllerGenerator
 
     function generateHash()
     {
-        return md5($this->renderControllerClass());
+        return md5($this->entityDefinition->renderTemplate('Controller.php', $this->getTraits()));
     }
 
     function getUpdatedFlagFilename(): string
@@ -72,37 +72,25 @@ class ControllerGenerator
     function getTraits(): array
     {
         $traits = [];
-        foreach ($this->entityDefinition->parts as $part) {
+        foreach ($this->entityDefinition->getParts() as $part) {
             /** @var Part $part */
             $traits = array_merge($traits, $part->controllerTraits);
         }
+        
         $traits = array_unique($traits);
 
         $traits = array_map(fn($trait) => str_replace('MapasCulturais\Traits', 'CoreTraits', $trait), $traits);
 
         return array_reverse($traits);
     }
-
-    function renderTemplate(string $filename): string
+    
+    function renderFile(string $filename, array $traits = []): void
     {
-        $content = file_get_contents(__DIR__ . '/templates/' . $filename);
-
-        $content = str_replace('_ENTITY_NAME_', $this->entityName, $content);
-        $content = str_replace('_ENTITY_TABLE_', $this->table, $content);
-
-        return $content;
-    }
-
-    function renderControllerClass(): string
-    {
-        $class_content = $this->renderTemplate('Controller.php');
-
-        foreach ($this->getTraits() as $trait) {
-            $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
-            $class_content = str_replace('/** TRAITS **/', "/** TRAITS **/\n    use $trait;", $class_content);
-        }
-
-        return $class_content;
+        $class_content = $this->entityDefinition->renderTemplate($filename, $traits);
+        
+        $destination_filename = preg_replace('#^Entity#', $this->entityName, $filename);
+        
+        file_put_contents(self::CONTROLLERS_PATH . "{$destination_filename}", $class_content);
     }
 
     function create(): string
@@ -113,7 +101,7 @@ class ControllerGenerator
         
         Plugin::log("Atualizando arquivo da entidade $this->entityName");
 
-        file_put_contents($this->filename, $this->renderControllerClass());
+        $this->renderFile('Controller.php', $this->getTraits());
 
         return $this->filename;
     }

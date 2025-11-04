@@ -34,7 +34,7 @@ class EntityGenerator
 
     function generateHash(): string|false
     {
-        return md5($this->renderTemplate('Entity.php', $this->getTraits()));
+        return md5($this->entityDefinition->renderTemplate('Entity.php', $this->getTraits()));
     }
 
     function getUpdatedFlagFilename(): string
@@ -69,25 +69,11 @@ class EntityGenerator
 
         return $saved_hash == $actual_hash;
     }
-    
-    /**
-     * @return Part[]
-     */
-    function getParts(?Part $parent = null): array
-    {
-        $parts = $parent ? $parent->getSubParts() : $this->entityDefinition->parts;
-        
-        foreach ($parts as $part) {
-            $parts = array_merge($parts, $part->getSubParts());
-        }
-        
-        return $parts;
-    }
 
     function getTraits(): array
     {
         $traits = [];
-        foreach ($this->getParts() as $part) {
+        foreach ($this->entityDefinition->getParts() as $part) {
             /** @var Part $part */
             $traits = array_merge($traits, $part->entityTraits);
         }
@@ -98,25 +84,10 @@ class EntityGenerator
 
         return array_reverse($traits);
     }
-
-    function renderTemplate(string $filename, array $traits = []): string
-    {
-        $content = file_get_contents(__DIR__ . '/templates/' . $filename);
-
-        $content = str_replace('_ENTITY_NAME_', $this->entityName, $content);
-        $content = str_replace('_ENTITY_TABLE_', $this->table, $content);
-
-        foreach ($traits as $trait) {
-            $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
-            $content = str_replace('/** TRAITS **/', "/** TRAITS **/\n    use $trait;", $content);
-        }
-        
-        return $content;
-    }
     
     function renderFile(string $filename, array $traits = []): void
     {
-        $class_content = $this->renderTemplate($filename, $traits);
+        $class_content = $this->entityDefinition->renderTemplate($filename, $traits);
         
         $destination_filename = preg_replace('#^Entity#', $this->entityName, $filename);
         
@@ -135,7 +106,7 @@ class EntityGenerator
 
         $this->renderFile('EntityPermissionCache.php');
         
-        foreach($this->getParts() as $part) {
+        foreach($this->entityDefinition->getParts() as $part) {
             $part->generateFiles($this);
         }
 
