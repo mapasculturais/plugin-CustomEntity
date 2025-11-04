@@ -9,4 +9,3 @@ $this->import('entity-profile');
 <div class="col-3 sm:col-12">
     <entity-profile :entity="entity"></entity-profile>
 </div>
-<h1>aASDASDASDASD</h1>
