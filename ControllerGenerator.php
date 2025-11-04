@@ -9,17 +9,18 @@ class ControllerGenerator
     const FLAGS_PATH = PRIVATE_FILES_PATH . "CustomEntity/";
     const CONTROLLERS_PATH = __DIR__ . "/Controllers/";
 
+    public readonly string $slug;
     public readonly string $table;
     public readonly string $entityName;
     public readonly string $filename;
     public readonly string $className;
 
     function __construct(
-        protected readonly string $slug,
-        protected readonly object $config
+        protected readonly EntityDefinition $entityDefinition
     ) {
-        $this->table = $this->config->table;
-        $this->entityName = $this->config->entity;
+        $this->slug = $this->entityDefinition->slug;
+        $this->table = $this->entityDefinition->table;
+        $this->entityName = $this->entityDefinition->entity;
         $this->filename = self::CONTROLLERS_PATH . "{$this->entityName}.php";
         $this->className = __NAMESPACE__ . "\\Controllers\\{$this->entityName}";
     }
@@ -71,7 +72,7 @@ class ControllerGenerator
     function getTraits(): array
     {
         $traits = [];
-        foreach ($this->config->parts as $part) {
+        foreach ($this->entityDefinition->parts as $part) {
             /** @var Part $part */
             $traits = array_merge($traits, $part->controllerTraits);
         }

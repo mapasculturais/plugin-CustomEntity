@@ -5,9 +5,16 @@ namespace CustomEntity;
 use MapasCulturais\Plugin as MapasCulturaisPlugin;
 use MapasCulturais\i;
 use MapasCulturais\App;
+use MapasCulturais\Traits\Singleton;
 
+/**
+ * @property-read EntityDefinition[] $config
+ * @package CustomEntity
+ */
 class Plugin extends MapasCulturaisPlugin
 {
+    use Singleton;
+
     const DOCTRINE_TOOL = APPLICATION_PATH . "tools/doctrine";
 
     protected array $entities = [];
@@ -16,9 +23,9 @@ class Plugin extends MapasCulturaisPlugin
     {
         $entities_config = [];
 
-        foreach ($config['entities']() as $entity_slug => $entity_config) {
-            $entity_config = (object) $entity_config;
-            $entities_config[$entity_slug] = $this->parseEntityConfig($entity_slug, $entity_config);
+        foreach ($config['entities']() as $entity_definition) {
+            /** @var EntityDefinition $entity_definition */
+            $entities_config[$entity_definition->slug] = $entity_definition;
         }
 
         parent::__construct($entities_config);
@@ -40,25 +47,21 @@ class Plugin extends MapasCulturaisPlugin
             return;
         }
 
-        foreach (array_keys($this->config) as $entity_slug) {
-            $this->registerEntity($entity_slug);
-        }
-
-        foreach ($this->entities as $entity_slug => $config) {
-            $config->entity->create();
-            $config->controller->create();
+        foreach ($this->config as $entity_slug => $config) {
+            $config->entityGenerator->create();
+            $config->controllerGenerator->create();
         }
 
         $this->updateScheme();
 
         $this->flagEntitiesAsUpdated();
 
-        foreach ($this->entities as $entity_slug => $config) {
+        foreach ($this->config as $entity_slug => $config) {
             /** @var EntityGenerator */
-            $entity_generator = $config->entity;
+            $entity_generator = $config->entityGenerator;
 
             /** @var ControllerGenerator */
-            $controller_generator = $config->controller;
+            $controller_generator = $config->controllerGenerator;
 
             // register controller
             $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
@@ -69,51 +72,23 @@ class Plugin extends MapasCulturaisPlugin
 
     public function register() {}
 
-    protected function parseEntityConfig(string $entity_slug, object $entity_config)
-    {
-        $required_keys = [
-            'entity' => i::__("$entity_slug: o nome da classe da entidade (chave 'entity') é obrigatória"),
-            'table' => i::__("$entity_slug: o nome da tabela da entidade (chave 'table') é obrigatória"),
-        ];
-
-        foreach ($required_keys as $key => $error) {
-            if (!isset($entity_config->$key)) {
-                throw new \Exception($error);
-            }
-        }
-
-        $entity_config->uses = array_reverse($entity_config->uses ?? []);
-
-        return $entity_config;
-    }
-
-    protected function getEntityConfig(string $entity_slug): object
+    public function getEntityConfig(?string $entity_slug = null): object
     {
         return $this->config[$entity_slug];
     }
 
     protected function flagEntitiesAsUpdated(): void
     {
-        foreach ($this->entities as $entity_slug => $config) {
-            $config->entity->flagAsUpdated();
-            $config->controller->flagAsUpdated();
+        foreach ($this->config as $config) {
+            $config->entityGenerator->flagAsUpdated();
+            $config->controllerGenerator->flagAsUpdated();
         }
-    }
-
-    protected function registerEntity(string $entity_slug): void
-    {
-        $entity_config = $this->getEntityConfig($entity_slug);
-
-        $this->entities[$entity_slug] = (object) [
-            'entity' => new EntityGenerator($entity_slug, $entity_config),
-            'controller' => new ControllerGenerator($entity_slug, $entity_config),
-        ];
     }
 
     public function updateScheme(): void
     {
-        foreach ($this->entities as $entity_slug => $config) {
-            $config->entity->updateScheme();
+        foreach ($this->config as $config) {
+            $config->entityGenerator->updateScheme();
         }
     }
 
