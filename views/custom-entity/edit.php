@@ -67,7 +67,7 @@ $definition = Plugin::$intance;
                     </template>
                     <template #content>
                         <?php $this->applyTemplateHook('tab-info--content','before') ?>
-                        <div class="left grid-12 v-center">
+                        <div class="grid-12 v-center">
                             <?php $this->applyTemplateHook('tab-info--content','begin') ?>
                             <?php $this->applyTemplateHook('tab-info--content','end') ?>
                         </div>
