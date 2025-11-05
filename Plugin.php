@@ -93,20 +93,21 @@ class Plugin extends MapasCulturaisPlugin
         }
     }
 
-    public function addEntityDescriptionToJs(string $entity_slug, EntityGenerator $generator): void {
+    public function addEntityDescriptionToJs(string $entity_slug, EntityGenerator $generator): void
+    {
         $app = App::i();
 
-        $app->hook('mapas.printJsObject:before', function () use($entity_slug, $generator) {
+        $app->hook('mapas.printJsObject:before', function () use ($entity_slug, $generator) {
             /** @var \MapasCulturais\Themes\BaseV2\Theme */
             $entity_class = $generator->className;
-            
+
             $this->jsObject['EntitiesDescription'][$entity_slug] = $entity_class::getPropertiesMetadata();
         });
     }
 
     static function getEntityDefinition(?string $entity_slug = null): ?EntityDefinition
     {
-        if(is_null($entity_slug)) {
+        if (is_null($entity_slug)) {
             $app = App::i();
             $entity_slug = $app->view->controller->id;
         }

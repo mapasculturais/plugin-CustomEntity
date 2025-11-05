@@ -27,4 +27,3 @@ class Files extends Part
         $generator->renderFile('EntityFile.php');
     }
 }
-

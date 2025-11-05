@@ -5,6 +5,7 @@ namespace CustomEntity\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 use MapasCulturais\App;
+
 /**
  * @property _ENTITY_NAME_ $owner
  */

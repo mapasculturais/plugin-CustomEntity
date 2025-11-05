@@ -30,7 +30,7 @@ class EntityDefinition
         }
 
         $app = App::i();
-        foreach($this->getFileGroups() as $group) {
+        foreach ($this->getFileGroups() as $group) {
             $app->registerFileGroup($this->slug, $group);
         }
     }
@@ -69,9 +69,9 @@ class EntityDefinition
     {
         $validations = [];
 
-        foreach($this->getParts() as $part) {
-            foreach($part->getEntityValidations() as $prop => $property_validations) {
-                if(isset($validations[$prop])) {
+        foreach ($this->getParts() as $part) {
+            foreach ($part->getEntityValidations() as $prop => $property_validations) {
+                if (isset($validations[$prop])) {
                     $validations[$prop] = array_merge($validations[$prop], $property_validations);
                 } else {
                     $validations[$prop] = $property_validations;
@@ -89,7 +89,7 @@ class EntityDefinition
     {
         $file_groups = [];
 
-        foreach($this->getParts() as $part) {
+        foreach ($this->getParts() as $part) {
             $file_groups = array_merge($file_groups, $part->getFileGroups());
         }
 
@@ -101,6 +101,4 @@ class EntityDefinition
         $sections = [];
         // foreach($this->entityGenerator)
     }
-
-
 }

@@ -21,37 +21,38 @@ class _ENTITY_NAME_ extends Entity
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(
-        name: "id", 
-        type: "integer", 
+        name: "id",
+        type: "integer",
         nullable: false
     )]
     public $id;
 
     #[ORM\Column(
-        name: "create_timestamp", 
-        type: "datetime", 
+        name: "create_timestamp",
+        type: "datetime",
         nullable: false,
         options: ['default' => "CURRENT_TIMESTAMP"],
     )]
     protected $createTimestamp;
 
     #[ORM\Column(
-        name: "update_timestamp", 
-        type: "datetime", 
+        name: "update_timestamp",
+        type: "datetime",
         nullable: false,
         options: ['default' => "CURRENT_TIMESTAMP"],
     )]
     protected $updateTimestamp;
 
     #[ORM\Column(
-        name: "status", 
-        type: "smallint", 
+        name: "status",
+        type: "smallint",
         nullable: false,
         options: ['default' => self::STATUS_ENABLED],
     )]
     protected $status = self::STATUS_ENABLED;
 
-    static function getValidations() {
+    static function getValidations()
+    {
         $app = App::i();
         $plugin = Plugin::$intance;
 
@@ -64,5 +65,4 @@ class _ENTITY_NAME_ extends Entity
 
         return $validations;
     }
-
 }

@@ -50,7 +50,7 @@ abstract class Part
     {
         return [];
     }
-    
+
     public function getEntityMetadata(): array
     {
         return [];

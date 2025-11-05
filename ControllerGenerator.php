@@ -76,18 +76,18 @@ class ControllerGenerator
             /** @var Part $part */
             $traits = array_merge($traits, $part->controllerTraits);
         }
-        
+
         $traits = array_unique($traits);
 
         $traits = array_map(fn($trait) => str_replace('MapasCulturais\Traits', 'CoreTraits', $trait), $traits);
 
         return array_reverse($traits);
     }
-    
+
     function renderFile(string $filename, array $traits = []): void
     {
         $class_content = $this->entityDefinition->renderTemplate($filename, $traits);
-        
+
         file_put_contents(self::CONTROLLERS_PATH . "{$this->entityName}.php", $class_content);
     }
 
@@ -96,7 +96,7 @@ class ControllerGenerator
         if ($this->isUpdated()) {
             return $this->filename;
         }
-        
+
         Plugin::log("Atualizando arquivo da entidade $this->entityName");
 
         $this->renderFile('Controller.php', $this->getTraits());

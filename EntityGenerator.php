@@ -77,20 +77,20 @@ class EntityGenerator
             /** @var Part $part */
             $traits = array_merge($traits, $part->entityTraits);
         }
-        
+
         $traits = array_unique($traits);
 
         $traits = array_map(fn($trait) => str_replace('MapasCulturais\Traits', 'CoreTraits', $trait), $traits);
 
         return array_reverse($traits);
     }
-    
+
     function renderFile(string $filename, array $traits = []): void
     {
         $class_content = $this->entityDefinition->renderTemplate($filename, $traits);
-        
+
         $destination_filename = preg_replace('#^Entity#', $this->entityName, $filename);
-        
+
         file_put_contents(self::ENTITIES_PATH . "{$destination_filename}", $class_content);
     }
 
@@ -99,14 +99,14 @@ class EntityGenerator
         if ($this->isUpdated()) {
             return $this->filename;
         }
-        
+
         Plugin::log("Atualizando arquivo da entidade $this->entityName");
 
         $this->renderFile('Entity.php', $this->getTraits());
 
         $this->renderFile('EntityPermissionCache.php');
-        
-        foreach($this->entityDefinition->getParts() as $part) {
+
+        foreach ($this->entityDefinition->getParts() as $part) {
             $part->generateFiles($this);
         }
 
