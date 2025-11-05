@@ -110,6 +110,10 @@ class EntityGenerator
             $part->generateFiles($this);
         }
 
+        $app = App::i();
+
+        $app->em->getConfiguration()->getMetadataCache()->clear();
+
         return $this->filename;
     }
 
