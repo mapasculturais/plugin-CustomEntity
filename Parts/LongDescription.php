@@ -25,7 +25,7 @@ class LongDescription extends Part
 
         return [
             'longDescription' => [
-                'required' => i::__('A descrição longa é obrigatória')
+                'required' => $this->requiredErrorMessage ?: i::__('A descrição longa é obrigatória')
             ],
         ];
     }

@@ -21,7 +21,7 @@ class ShortDescription extends Part
     {
         return [
             'shortDescription' => [
-                'required' => i::__('A descrição curta é obrigatória')
+                'required' => $this->requiredErrorMessage ?: i::__('A descrição curta é obrigatória')
             ],
         ];
     }

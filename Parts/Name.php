@@ -21,7 +21,7 @@ class Name extends Part
     {
         return [
             'name' => [
-                'required' => i::__('O nome é obrigatório')
+                'required' => $this->requiredErrorMessage ?: i::__('O nome é obrigatório')
             ],
         ];
     }

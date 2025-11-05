@@ -20,16 +20,20 @@ abstract class Part
 {
     use MagicGetter;
 
-    protected $isRequired = false;
+    protected bool $isRequired = false;
+
+    protected string $requiredErrorMessage = '';
 
     static function add($config = null): static
     {
         return new static($config);
     }
 
-    function required(): static
+    function required(string $error_message = ''): static
     {
         $this->isRequired = true;
+        $this->requiredErrorMessage = $error_message;
+
         return $this;
     }
 
