@@ -56,7 +56,6 @@ class ControllerGenerator
 
     function isUpdated()
     {
-        return false;
         $hash_filename = $this->getUpdatedFlagFilename();
 
         if (!file_exists($hash_filename)) {
