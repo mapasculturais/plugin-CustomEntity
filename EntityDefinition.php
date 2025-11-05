@@ -112,5 +112,6 @@ class EntityDefinition
     {
         $sections = [];
         // foreach($this->entityGenerator)
+        return $sections;
     }
 }
