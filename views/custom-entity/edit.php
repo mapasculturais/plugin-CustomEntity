@@ -74,6 +74,8 @@ $definition = Plugin::$intance;
                         <?php $this->applyTemplateHook('tab-info--content','after') ?>
                         <div class="divider"></div>
                         <div class="right">
+                            <?php $this->applyTemplateHook('tab-info--content--right','begin') ?>
+                            <?php $this->applyTemplateHook('tab-info--content--right','end') ?>
                         </div>
                     </template>
                 </mc-card>
