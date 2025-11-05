@@ -31,7 +31,7 @@ class _ENTITY_NAME_Meta extends \MapasCulturais\EntityMetadata
     /**
      * @var _ENTITY_NAME_
      */
-    #[ORM\ManyToOne(targetEntity: self::class . 'Meta')]
+    #[ORM\ManyToOne(targetEntity: _ENTITY_NAME_::class)]
     #[ORM\JoinColumn(name: "object_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
     protected $owner;
 
