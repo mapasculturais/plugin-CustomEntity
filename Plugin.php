@@ -119,6 +119,6 @@ class Plugin extends MapasCulturaisPlugin
             $entity_slug = $app->view->controller->id;
         }
 
-        return self::i()->config[$entity_slug] ?? null;
+        return self::$intance->config[$entity_slug] ?? null;
     }
 }
