@@ -68,6 +68,6 @@ abstract class Part
 
     public function generateFiles(EntityGenerator $generator): void {}
 
-    public function register() {}
+    public function register(EntityDefinition $entity_definition) {}
     public function init(EntityDefinition $entity_definition) {}
 }

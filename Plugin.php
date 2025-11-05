@@ -47,31 +47,38 @@ class Plugin extends MapasCulturaisPlugin
             return;
         }
 
-        foreach ($this->config as $entity_slug => $config) {
-            $config->entityGenerator->create();
-            $config->controllerGenerator->create();
+        foreach ($this->config as $entity_slug => $definition) {
+            $definition->entityGenerator->create();
+            $definition->controllerGenerator->create();
         }
 
         $this->updateScheme();
 
         $this->flagEntitiesAsUpdated();
 
-        foreach ($this->config as $entity_slug => $config) {
-            $entity_generator = $config->entityGenerator;
-            $controller_generator = $config->controllerGenerator;
-
-            // register controller
-            $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
+        foreach ($this->config as $entity_slug => $definition) {
+            $entity_generator = $definition->entityGenerator;
 
             $this->addEntityDescriptionToJs($entity_slug, $entity_generator);
         }
 
-        foreach ($this->config as $config) {
-            $config->init();
+        foreach ($this->config as $definition) {
+            $definition->init();
         }
     }
 
-    public function register() {}
+    public function register() {
+        $app = App::i();
+        foreach ($this->config as $entity_slug => $definition) {
+
+            $controller_generator = $definition->controllerGenerator;
+
+            // register controller
+            $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
+
+            $definition->register();
+        }
+    }
 
     public function getEntityConfig(?string $entity_slug = null): object
     {

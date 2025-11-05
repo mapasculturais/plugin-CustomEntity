@@ -7,6 +7,8 @@ use MapasCulturais\Definitions\FileGroup;
 
 class EntityDefinition
 {
+    public readonly string $entityClassName;
+    public readonly string $controllerClassName;
     public readonly EntityGenerator $entityGenerator;
     public readonly ControllerGenerator $controllerGenerator;
 
@@ -21,6 +23,9 @@ class EntityDefinition
     ) {
         $this->entityGenerator = new EntityGenerator($this);
         $this->controllerGenerator = new ControllerGenerator($this);
+
+        $this->entityClassName = $this->entityGenerator->className;
+        $this->controllerClassName = $this->controllerGenerator->className;
     }
 
     function init()
@@ -28,10 +33,17 @@ class EntityDefinition
         foreach ($this->getParts() as $part) {
             $part->init($this);
         }
+    }
 
+    function register()
+    {
         $app = App::i();
         foreach ($this->getFileGroups() as $group) {
             $app->registerFileGroup($this->slug, $group);
+        }
+
+        foreach ($this->getParts() as $part) {
+            $part->register($this);
         }
     }
 
