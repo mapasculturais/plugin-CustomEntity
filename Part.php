@@ -22,9 +22,9 @@ abstract class Part
 
     protected $isRequired = false;
 
-    static function create(): static
+    static function add($config = null): static
     {
-        return new static;
+        return new static($config);
     }
 
     function required(): static

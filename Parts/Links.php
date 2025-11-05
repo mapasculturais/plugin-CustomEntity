@@ -13,7 +13,7 @@ class Links extends Part
     public function getSubParts(): array
     {
         return [
-            MetaLists::create()
+            MetaLists::add()
         ];
     }
 

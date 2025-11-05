@@ -15,7 +15,7 @@ class VideoGallery extends Part
     public function getSubParts(): array
     {
         return [
-            MetaLists::create()
+            MetaLists::add()
         ];
     }
 

@@ -14,7 +14,7 @@ class Downloads extends Part
     public function getSubParts(): array
     {
         return [
-            Files::create()
+            Files::add()
         ];
     }
 

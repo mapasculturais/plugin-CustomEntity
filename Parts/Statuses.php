@@ -12,9 +12,9 @@ class Statuses extends Part
     public function getSubParts(): array
     {
         return [
-            StatusDraft::create(),
-            StatusArchive::create(),
-            SoftDelete::create(),
+            StatusDraft::add(),
+            StatusArchive::add(),
+            SoftDelete::add(),
         ];
     }
 }
