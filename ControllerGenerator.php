@@ -97,7 +97,7 @@ class ControllerGenerator
             return $this->filename;
         }
 
-        Plugin::log("Atualizando arquivo da entidade $this->entityName");
+        Plugin::log("Atualizando arquivo do controller $this->entityName");
 
         $this->renderFile('Controller.php', $this->getTraits());
 
