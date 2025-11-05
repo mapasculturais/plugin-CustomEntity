@@ -16,6 +16,7 @@ class EntityDefinition
         public readonly string $slug,
         public readonly string $entity,
         public readonly string $table,
+        public readonly OwnerPart $owner,
 
         /** @var Part[] */
         public readonly array $parts

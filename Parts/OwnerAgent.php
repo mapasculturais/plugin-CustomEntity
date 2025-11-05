@@ -2,10 +2,10 @@
 
 namespace CustomEntity\Parts;
 
-use CustomEntity\Part;
+use CustomEntity\OwnerPart;
 use MapasCulturais\Traits;
 
-class OwnerAgent extends Part
+class OwnerAgent extends OwnerPart
 {
     public function getEntityTraits(): array
     {
