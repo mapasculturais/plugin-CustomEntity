@@ -2,7 +2,6 @@
 
 namespace CustomEntity\Parts;
 
-use CustomEntity\EntityGenerator;
 use CustomEntity\Part;
 use MapasCulturais\Traits;
 
