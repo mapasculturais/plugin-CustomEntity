@@ -75,7 +75,7 @@ class EntityDefinition
             $parts = array_merge($parts, $part->getSubParts());
         }
 
-        return $parts;
+        return [$this->owner, ...$parts];
     }
 
     function getValidations(): array
