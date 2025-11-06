@@ -4,6 +4,7 @@ namespace CustomEntity;
 
 use MapasCulturais\App;
 use MapasCulturais\Definitions\FileGroup;
+use MapasCulturais\Definitions\Metadata;
 
 class EntityDefinition
 {
@@ -45,6 +46,11 @@ class EntityDefinition
 
         foreach ($this->getParts() as $part) {
             $part->register($this);
+
+            foreach($part->getEntityMetadata() as $key => $config) {
+                $definition = new Metadata($key, $config);
+                $app->registerMetadata($definition, $this->entityClassName);
+            }
         }
     }
 
