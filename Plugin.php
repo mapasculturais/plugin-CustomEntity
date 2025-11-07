@@ -69,14 +69,20 @@ class Plugin extends MapasCulturaisPlugin
 
     public function register() {
         $app = App::i();
-        foreach ($this->config as $entity_slug => $definition) {
 
+        foreach ($this->config as $entity_slug => $definition) {
             $controller_generator = $definition->controllerGenerator;
 
             // register controller
             $app->registerController($entity_slug, $controller_generator->className, view_dir: 'custom-entity');
-
+            
             $definition->register();
+        }
+
+        $config_hash = md5(serialize($this->config));
+        if($app->mscache->fetch(__CLASS__ . ':configHash') != $config_hash) {
+            $app->em->getConfiguration()->getMetadataCache()->clear();
+            $app->mscache->save(__CLASS__ . ':configHash', $config_hash);
         }
     }
 
