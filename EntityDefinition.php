@@ -20,7 +20,14 @@ class EntityDefinition
         public readonly OwnerPart $owner,
 
         /** @var Part[] */
-        public readonly array $parts
+        public readonly array $parts,
+
+        /**
+         * Nome do ícone definido no init do componente mc-icon ou um ícone qualquer do iconify.
+         * Se o valor informado conter o caracter : (dois pontos) será considerado que é um ícone do iconify.
+         */
+        public readonly string $icon = 'app',
+        public readonly array $texts = []
 
     ) {
         $this->entityGenerator = new EntityGenerator($this);
@@ -35,6 +42,18 @@ class EntityDefinition
         foreach ($this->getParts() as $part) {
             $part->init($this);
         }
+
+        $app = App::i();
+        $self = $this;
+
+        // define o ícone da entidade
+        $app->hook('component(mc-icon).iconset', function(&$iconset) use($self) {
+            if(strpos($self->icon, ':')){
+                $iconset[$self->slug] = $self->icon;
+            } else {
+                $iconset[$self->slug] = $iconset[$self->icon] ?? '';
+            }
+        });
     }
 
     function register()
@@ -47,11 +66,44 @@ class EntityDefinition
         foreach ($this->getParts() as $part) {
             $part->register($this);
 
-            foreach($part->getEntityMetadata() as $key => $config) {
+            foreach ($part->getEntityMetadata() as $key => $config) {
                 $definition = new Metadata($key, $config);
                 $app->registerMetadata($definition, $this->entityClassName);
             }
         }
+    }
+
+    function text(string $text): string
+    {
+        $replacements = [
+            'suas entidades',
+            'sua entidade',
+
+            'das entidades',
+            'da entidade',
+
+            'minhas entidades',
+            'minha entidade',
+
+            'as entidades',
+            'a entidade',
+
+            'entidades',
+            'entidade',
+        ];
+
+        foreach ($replacements as $from) {
+            $to = $this->texts[$from] ?? false;
+            if (!$to) {
+                continue;
+            }
+            $text = str_replace(ucwords($from), ucwords($to), $text);
+            $text = str_replace(ucfirst($from), ucfirst($to), $text);
+            $text = str_replace(mb_strtolower($from), mb_strtolower($to), $text);
+            $text = str_replace(mb_strtoupper($from), mb_strtoupper($to), $text);
+        }
+
+        return $text;
     }
 
     function renderTemplate(string $filename, array $traits = []): string
