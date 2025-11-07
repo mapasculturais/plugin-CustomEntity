@@ -3,24 +3,27 @@
  * @var MapasCulturais\App $app
  * @var MapasCulturais\Themes\BaseV2\Theme $this
  */
- 
+
+use CustomEntity\Plugin;
 use MapasCulturais\i;
+
 $this->layout = 'entity';
 
 $this->import('
-    mc-breadcrumb
     entity-actions
     entity-data
     entity-header
+    mc-breadcrumb
     mc-container
     mc-tab
     mc-tabs
 ');
 
+$definition = Plugin::$intance->getEntityDefinition();
+
 $this->breadcrumb = [
-    ['label' => i::__('Inicio'), 'url' => $app->createUrl('panel', 'index')],
-    ['label' => i::__('Espaços'), 'url' => $app->createUrl('search', 'spaces')],
-    ['label' => $entity->name, 'url' => $app->createUrl('space', 'single', [$entity->id])],
+    ['label' => $definition->text(i::__('Entidades'))],
+    ['label' => $entity->name, 'url' => $app->createUrl($definition->slug, 'single', [$entity->id])],
 ];
 ?>
 <?php $this->applyTemplateHook('main-app','before') ?>

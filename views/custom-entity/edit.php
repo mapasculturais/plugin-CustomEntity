@@ -6,43 +6,26 @@ use MapasCulturais\i;
 $this->layout = 'entity';
 
 $this->import('
-    mc-breadcrumb
-    entity-header
-    mc-tabs
-    mc-tab
-    mc-card
-    entity-status
-    mc-container
-
-    country-address-form
-    confirm-before-exit 
+    confirm-before-exit
     entity-actions
-    entity-admins
-    entity-cover
-    entity-field
-    entity-files-list
-    entity-gallery
-    entity-gallery-video
-    entity-links
-    entity-owner
-    entity-parent-edit
-    entity-profile
-    entity-related-agents
-    entity-social-media
-    entity-terms
-    permission-publish
+    entity-header
+    entity-status
+    mc-breadcrumb
+    mc-card
+    mc-container
+    mc-tab
+    mc-tabs
 ');
+
+$definition = Plugin::$intance->getEntityDefinition();
 
 $this->breadcrumb = [
     ['label' => i::__('Painel'), 'url' => $app->createUrl('panel', 'index')],
-    ['label' => i::__('Meus Espaços'), 'url' => $app->createUrl('panel', 'spaces')],
-    ['label' => $entity->name, 'url' => $app->createUrl('space', 'edit', [$entity->id])],
+    ['label' => $definition->text(i::__('Minhas Entidades'))],
+    ['label' => $entity->name, 'url' => $app->createUrl($definition->slug, 'edit', [$entity->id])],
 ];
 
-$definition = Plugin::$intance;
-
 ?>
-
 <?php $this->applyTemplateHook('main-app','before') ?>
 <div class="main-app">
     <?php $this->applyTemplateHook('main-app','begin') ?>
@@ -83,14 +66,15 @@ $definition = Plugin::$intance;
                     <?php $this->applyTemplateHook('main-mc-card','begin') ?>
                     <mc-card>
                         <template #title>
-                            <label><?php i::_e("Endereço do espaço"); ?></label>
+                            <label><?php i::_e("Mais informações"); ?></label>
                         </template>
                         <template #content>
-                            <?php $this->applyTemplateHook('mc-card-content-address','begin') ?>
+                            <?php $this->applyTemplateHook('tab-info--more','before') ?>
                             <div class="grid-12">
-                                
+                                <?php $this->applyTemplateHook('tab-info--more','begin') ?>
+                                <?php $this->applyTemplateHook('tab-info--more','end') ?>
                             </div>
-                            <?php $this->applyTemplateHook('mc-card-content-address','end') ?>
+                            <?php $this->applyTemplateHook('tab-info--more','after') ?>
                         </template>
                     </mc-card>
                     <?php $this->applyTemplateHook('main-mc-card','end') ?>
