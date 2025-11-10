@@ -91,7 +91,7 @@ class Taxonomy extends Part
             $this->part('custom-entity/single/taxonomy', ['taxonomy' => $taxonomy]);
         });
 
-        $app->hook("template(search.{$entity_definition->slug}.search-filter-community):end", function () use ($app, $self) {
+        $app->hook("template(search.{$entity_definition->slug}.search-filter-{$entity_definition->slug}):end", function () use ($app, $self) {
             /** @var Theme $this */
 
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
