@@ -107,6 +107,10 @@ app.component('custom-entity-taxonomy-filter', {
                 this.pseudoQuery[key] = [];
             }
         },
+
+        placeholderText() {
+            return this.text('Selecione os termos');
+        }
     },
 });
 
