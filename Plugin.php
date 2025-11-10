@@ -125,7 +125,9 @@ class Plugin extends MapasCulturaisPlugin
             $controller_slug = $app->view->controller->id;
             $action = $app->view->controller->action;
 
-            $entity_slug = $controller_slug != 'panel' ? $controller_slug : $action;
+            $entity_slug = $controller_slug != 'panel' && $controller_slug != 'search'
+                ? $controller_slug
+                : $action;
         }
 
         return self::$intance->config[$entity_slug] ?? null;
