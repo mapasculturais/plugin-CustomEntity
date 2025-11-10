@@ -61,36 +61,84 @@ app.component('custom-entity-taxonomy-filter', {
         },
 
         normalizeTerms(rawTerms) {
+            const normalized = {};
+
             if (Array.isArray(rawTerms)) {
-                return rawTerms.map((term) => this.normalizeTerm(term)).filter(Boolean);
+                rawTerms.forEach((term) => {
+                    const { value, label } = this.normalizeTerm(term);
+
+                    if (value && label) {
+                        normalized[value] = label;
+                    }
+                });
+
+                return normalized;
             }
 
-            if (rawTerms && typeof rawTerms == 'object') {
-                return Object.values(rawTerms)
-                    .map((term) => this.normalizeTerm(term))
-                    .filter(Boolean);
+            if (rawTerms && typeof rawTerms === 'object') {
+                Object.entries(rawTerms).forEach(([key, term]) => {
+                    const { value, label } = this.normalizeTerm(term, key);
+
+                    if (value && label) {
+                        normalized[value] = label;
+                    }
+                });
+
+                return normalized;
             }
 
-            return [];
+            return normalized;
         },
 
-        normalizeTerm(term) {
-            if (typeof term === 'string') {
-                return term;
+        normalizeTerm(term, fallbackValue = null) {
+            if (typeof term === 'string' || typeof term === 'number') {
+                const normalized = this.normalizeTermString(term);
+
+                if (normalized) {
+                    return { value: normalized, label: normalized };
+                }
+
+                return { value: null, label: null };
             }
 
             if (term && typeof term === 'object') {
-                if (typeof term.label === 'string') {
-                    return term.label;
+                const value = this.normalizeTermString(
+                    term.value ?? term.slug ?? term.key ?? term.id ?? fallbackValue
+                );
+
+                const labelSource = term.label ?? term.name ?? term.description ?? term.title ?? value;
+                const label = this.normalizeTermString(labelSource);
+
+                if (value && label) {
+                    return { value, label };
                 }
 
-                if (typeof term.name === 'string') {
-                    return term.name;
+                if (value) {
+                    return { value, label: value };
                 }
 
-                if (typeof term.description === 'string') {
-                    return term.description;
+                if (label) {
+                    return { value: label, label };
                 }
+            }
+
+            const normalizedFallback = this.normalizeTermString(fallbackValue);
+
+            if (normalizedFallback) {
+                return { value: normalizedFallback, label: normalizedFallback };
+            }
+
+            return { value: null, label: null };
+        },
+
+        normalizeTermString(value) {
+            if (typeof value === 'string') {
+                const trimmed = value.trim();
+                return trimmed.length ? trimmed : null;
+            }
+
+            if (typeof value === 'number') {
+                return String(value);
             }
 
             return null;
@@ -106,11 +154,11 @@ app.component('custom-entity-taxonomy-filter', {
             if (!Array.isArray(this.pseudoQuery[key])) {
                 this.pseudoQuery[key] = [];
             }
-        },
 
-        placeholderText() {
-            return this.text('Selecione os termos');
-        }
+            this.pseudoQuery[key] = this.pseudoQuery[key].filter(
+                (value) => value && Object.prototype.hasOwnProperty.call(this.item.terms, value)
+            );
+        },
     },
 });
 

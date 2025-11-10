@@ -19,7 +19,7 @@ $this->import('
     <mc-multiselect
         :model="pseudoQuery['term:' + item.slug]"
         :items="item.terms"
-        :placeholder="text.selectTerms || placeholderText()"
+        :placeholder="text('Selecione os termos')"
         hide-filter
         hide-button
     ></mc-multiselect>
