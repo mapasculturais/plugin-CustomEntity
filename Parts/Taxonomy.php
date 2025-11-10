@@ -90,5 +90,12 @@ class Taxonomy extends Part
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
             $this->part('custom-entity/single/taxonomy', ['taxonomy' => $taxonomy]);
         });
+
+        $app->hook("template(search.{$entity_definition->slug}.search-filter-community):end", function () use ($app, $self) {
+            /** @var Theme $this */
+
+            $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
+            $this->part('custom-entity/search/taxonomy', ['taxonomy' => $taxonomy]);
+        });
     }
 }
