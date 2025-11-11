@@ -44,7 +44,7 @@ $this->breadcrumb = [
             <?php $this->applyTemplateHook('search-custom-entity', 'begin') ?>
             <mc-tab icon="list" label="<?= $definition->text(i::__('Lista')) ?>" slug="list">
                 <div class="search__tabs--list">
-                    <search-list :pseudo-query="pseudoQuery" type="<?= $definition->slug ?>" select="name">
+                    <search-list :pseudo-query="pseudoQuery" type="<?= $definition->slug ?>" select="name,shortDescription,files.avatar">
                         <template #filter>
                             <search-filter-custom-entity :pseudo-query="pseudoQuery" slug="<?= $definition->slug ?>"></search-filter-custom-entity>
                         </template>
