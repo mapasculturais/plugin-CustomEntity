@@ -27,6 +27,20 @@ class Search extends Part
 
             $this->render('custom-entity');
         });
+
+        $app->hook('template(<<*>>.<<*>>.mc-header-menu-projects):after', function() use ($definition, $app) {
+            /** @var Theme $this */
+            $url = $app->createUrl('search', $definition->slug);
+            $icon = $definition->slug;
+            $label = ucfirst($definition->texts['entidades']);
+            
+            $this->part('custom-entity/search/header-menu', [
+                'url' => $url,
+                'icon' => $icon,
+                'label' => $label,
+                'slug' => $definition->slug,
+            ]);
+        });
     }
 }
 
