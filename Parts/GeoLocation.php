@@ -33,5 +33,11 @@ class GeoLocation extends Part
             /** @var Theme $this */
             $this->part('custom-entity/edit/geo-location');
         });
+
+        $app->hook("template(search.{$entity_definition->slug}.search-custom-entity):end", function () use ($app) {
+            /** @var Theme $this */
+
+            $this->part('custom-entity/search/geo-location');
+        });
     }
 }
