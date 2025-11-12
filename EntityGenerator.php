@@ -59,14 +59,13 @@ class EntityGenerator
     {
         $hash_filename = $this->getUpdatedFlagFilename();
 
-        
         if (!file_exists($hash_filename)) {
             return false;
         }
 
         $saved_hash = file_get_contents($hash_filename);
         $actual_hash = $this->generateHash();
-        
+
         return $saved_hash == $actual_hash;
     }
 
