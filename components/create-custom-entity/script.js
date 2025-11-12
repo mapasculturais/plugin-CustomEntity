@@ -25,6 +25,11 @@ app.component('create-custom-entity', {
             type: Boolean,
             default: true
         },
+
+        type: {
+            type: String,
+            required: true
+        }
     },
 
     computed: {
@@ -61,20 +66,16 @@ app.component('create-custom-entity', {
                 '_type',
                 'userId',
             ];
-            Object.keys($DESCRIPTIONS.space).forEach((item) => {
-                if (!skip.includes(item) && $DESCRIPTIONS.space[item].required) {
+            Object.keys($DESCRIPTIONS[this.type]).forEach((item) => {
+                if (!skip.includes(item) && $DESCRIPTIONS[this.type][item].required) {
                     this.fields.push(item);
                 }
             })
         },
         createEntity() {
-            this.entity = Vue.ref(new Entity('space'));
+            this.entity = Vue.ref(new Entity(this.type));
             this.entity.type = 1;
             this.entity.terms = { area: [] }
-
-            this.entity.removeOptions = [
-                'Ponto de Cultura',
-            ];
         },
         createDraft(modal) {
             this.entity.status = 0;

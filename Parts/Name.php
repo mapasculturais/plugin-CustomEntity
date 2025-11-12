@@ -33,5 +33,10 @@ class Name extends Part
             /** @var Theme $this */
             $this->part('custom-entity/edit/name');
         });
+
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () {
+            /** @var Theme $this */
+            $this->part('custom-entity/edit/name');
+        });
     }
 }

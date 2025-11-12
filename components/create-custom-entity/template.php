@@ -20,9 +20,12 @@ $definition = Plugin::$intance->getEntityDefinition();
 <mc-modal :title="modalTitle" classes="create-modal create-custom-entity-modal" button-label="<?= $definition->text(i::__('Criar Entidade')) ?>"  @open="createEntity()" @close="destroyEntity()">
     <template v-if="entity && !entity.id" #default>
         <label><?= $definition->text(i::__('Crie uma entidade com informações básicas'))?><br><?php i::_e('e de forma rápida')?></label>
+        <?php $this->applyTemplateHook("create-{$definition->slug}__fields", 'before'); ?>
         <div class="create-modal__fields">
-            
+            <?php $this->applyTemplateHook("create-{$definition->slug}__fields", 'begin'); ?>
+            <?php $this->applyTemplateHook("create-{$definition->slug}__fields", 'end'); ?>
         </div>
+        <?php $this->applyTemplateHook("create-{$definition->slug}__fields", 'after'); ?>
     </template>
     
     <template v-if="entity?.id" #default>

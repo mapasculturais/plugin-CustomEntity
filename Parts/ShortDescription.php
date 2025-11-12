@@ -33,5 +33,11 @@ class ShortDescription extends Part
             /** @var Theme $this */
             $this->part('custom-entity/edit/short-description');
         });
+
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () {
+            /** @var Theme $this */
+            $this->part('custom-entity/edit/short-description');
+        });
+
     }
 }
