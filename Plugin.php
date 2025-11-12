@@ -50,6 +50,7 @@ class Plugin extends MapasCulturaisPlugin
         foreach ($this->config as $entity_slug => $definition) {
             $definition->entityGenerator->create();
             $definition->controllerGenerator->create();
+            $definition->entityCssGenerator->create();
         }
 
         $this->updateScheme();

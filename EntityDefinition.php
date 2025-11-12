@@ -3,6 +3,7 @@
 namespace CustomEntity;
 
 use MapasCulturais\App;
+use MapasCulturais\Controller;
 use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\Definitions\Metadata;
 
@@ -12,29 +13,36 @@ class EntityDefinition
     public readonly string $controllerClassName;
     public readonly EntityGenerator $entityGenerator;
     public readonly ControllerGenerator $controllerGenerator;
+    public readonly EntityCssGenerator $entityCssGenerator;
 
     function __construct(
         public readonly string $slug,
-        public readonly string $entity,
-        public readonly string $table,
         public readonly OwnerPart $owner,
-
-        /** @var Part[] */
-        public readonly array $parts,
 
         /**
          * Nome do ícone definido no init do componente mc-icon ou um ícone qualquer do iconify.
          * Se o valor informado conter o caracter : (dois pontos) será considerado que é um ícone do iconify.
-         */
+        */
         public readonly string $icon = 'app',
-        public readonly array $texts = []
-
+        public readonly string $color = '#19d758',
+        public readonly array $texts = [],
+        
+        /** @var Part[] */
+        public readonly array $parts = [],
+        
+        public ?string $entity = null,
+        public ?string $table = null,
     ) {
+        $this->entity = $this->entity ?: ucfirst($this->slug);
+        $this->table = $this->table ?: $this->slug;
+
         $this->entityGenerator = new EntityGenerator($this);
         $this->controllerGenerator = new ControllerGenerator($this);
+        $this->entityCssGenerator = new EntityCssGenerator($this);
 
         $this->entityClassName = $this->entityGenerator->className;
         $this->controllerClassName = $this->controllerGenerator->className;
+
     }
 
     function init()
@@ -53,6 +61,12 @@ class EntityDefinition
             } else {
                 $iconset[$self->slug] = $iconset[$self->icon] ?? '';
             }
+        });
+
+        $app->hook('GET(<<*>>):before', function () use($self, $app) {
+            /** @var EntityDefinition $this */
+
+            $app->view->enqueueStyle('app-v2', 'custom-entity--' . $self->slug, 'css/' . $self->entityCssGenerator->filename);
         });
     }
 
@@ -106,7 +120,7 @@ class EntityDefinition
         return $text;
     }
 
-    function renderTemplate(string $filename, array $traits = []): string
+    function renderTemplate(string $filename, array $traits = [], array $replacements = []): string
     {
         $content = file_get_contents(__DIR__ . '/templates/' . $filename);
 
@@ -117,6 +131,10 @@ class EntityDefinition
         foreach ($traits as $trait) {
             $trait = preg_replace('#^' . __NAMESPACE__ . '\\\#', '', $trait);
             $content = str_replace('/** TRAITS **/', "/** TRAITS **/\n    use $trait;", $content);
+        }
+
+        foreach ($replacements as $from => $to) {
+            $content = str_replace($from, $to, $content);
         }
 
         return $content;

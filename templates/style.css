@@ -1,0 +1,35 @@
+._ENTITY_SLUG___color {
+  color: color-500;
+}
+._ENTITY_SLUG___color--dark {
+  color: color-700;
+}
+._ENTITY_SLUG___color--light {
+  color: color-300;
+}
+._ENTITY_SLUG___background {
+  background-color: color-500;
+  color: var(--mc-low-500);
+}
+._ENTITY_SLUG___hover:hover {
+  color: color-500;
+}
+._ENTITY_SLUG___hover--bg:hover {
+  background-color: color-500;
+}
+._ENTITY_SLUG___border {
+  border: var(--mc-border-hairline);
+  border-color: color-500;
+}
+._ENTITY_SLUG___border--solid {
+  border: var(--mc-border-solid);
+  border-color: color-500;
+}
+._ENTITY_SLUG___border--dark {
+  border: var(--mc-border-hairline);
+  border-color: color-700;
+}
+._ENTITY_SLUG___border--light {
+  border: var(--mc-border-hairline);
+  border-color: color-300;
+}

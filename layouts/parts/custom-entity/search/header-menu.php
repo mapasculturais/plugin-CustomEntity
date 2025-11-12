@@ -8,7 +8,7 @@
 
 <li>
     <a href="<?= $url ?>" class="mc-header-menu--item <?= $slug ?>">
-        <span class="icon"> <mc-icon name="<?= $icon ?>"></mc-icon> </span>
+        <span class="icon <?= $slug ?>__hover--bg"> <mc-icon name="<?= $icon ?>"></mc-icon> </span>
         <p class="label"><?= $label ?></p>
     </a>
  </li>
