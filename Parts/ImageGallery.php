@@ -29,7 +29,7 @@ class ImageGallery extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content):end", function () {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):end", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/image-gallery');
         });
