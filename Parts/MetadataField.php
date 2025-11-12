@@ -28,7 +28,11 @@ class MetadataField extends Part
             throw new \Exception("O nome do metadado deve ser uma string");
         }
 
-        return parent::add($name);
+        $instance = parent::add($name);
+
+        $instance->label($name);
+
+        return $instance;
     }
 
     public function type(string $type): static
