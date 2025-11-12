@@ -41,7 +41,7 @@ class EntityCssGenerator
 
     function getUpdatedFlagFilename(): string
     {
-        return self::FLAGS_PATH . "entity.{$this->entityDefinition->slug}.hash";
+        return self::FLAGS_PATH . "css.{$this->entityDefinition->slug}.hash";
     }
 
     function flagAsUpdated()
