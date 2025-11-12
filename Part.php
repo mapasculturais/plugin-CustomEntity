@@ -2,6 +2,7 @@
 
 namespace CustomEntity;
 
+use MapasCulturais\Traits\MagicCallers;
 use MapasCulturais\Traits\MagicGetter;
 
 /**
