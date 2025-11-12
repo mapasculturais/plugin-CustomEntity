@@ -14,6 +14,7 @@ class Statuses extends Part
         return [
             StatusDraft::add(),
             StatusArchive::add(),
+            StatusPrivate::add(),
             SoftDelete::add(),
         ];
     }
