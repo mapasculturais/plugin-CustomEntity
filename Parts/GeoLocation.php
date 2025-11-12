@@ -96,5 +96,10 @@ class GeoLocation extends Part
 
             $this->part('custom-entity/search/geo-location');
         });
+
+        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () {
+            /** @var Theme $this */
+            $this->part('custom-entity/single/geo-location');
+        });
     }
 }
