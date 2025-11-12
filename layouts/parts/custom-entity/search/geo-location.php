@@ -9,6 +9,7 @@ use MapasCulturais\i;
 use CustomEntity\Plugin;
 
 $this->import('
+    mc-icon
     mc-tab
     search-map
     search-filter-custom-entity
@@ -22,6 +23,11 @@ $definition = Plugin::$intance->getEntityDefinition();
         <search-map type="<?= $definition->slug ?>" :pseudo-query="pseudoQuery">
             <template #filter>
                 <search-filter-custom-entity :pseudo-query="pseudoQuery" position="map"></search-filter-custom-entity>
+            </template>
+            <template #marker>
+                <div class="<?= $definition->slug ?>__background mc-map-marker">
+                    <mc-icon name="<?= $definition->slug ?>"></mc-icon>
+                </div>
             </template>
         </search-map>
     </div>
