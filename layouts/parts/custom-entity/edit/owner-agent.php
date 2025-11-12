@@ -9,4 +9,4 @@ use MapasCulturais\i;
 
 $this->import('entity-owner');
 ?>
-<entity-owner :entity="entity" classes="col-12" title="<?php i::_e('Publicado por'); ?>" editable></entity-owner>
+<entity-owner :entity="entity" classes="col-12" title="<?= $label ?: i::__('Publicado por'); ?>" editable></entity-owner>
