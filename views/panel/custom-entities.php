@@ -28,7 +28,7 @@ $definition = Plugin::$intance->getEntityDefinition();
             <?= $definition->text(i::__('Nesta seção você pode adicionar e gerenciar suas entidades')) ?>
         </p>
         <div class="panel-page__header-actions">
-            <create-custom-entity :editable="true" #default="{modal}">
+            <create-custom-entity type="<?= $definition->slug ?>" :editable="true" #default="{modal}">
                 <button @click="modal.open()" class="button button--primary button--icon">
                     <mc-icon name="add"></mc-icon>
                     <span><?= $definition->text(i::__('Criar Entidade')) ?></span>

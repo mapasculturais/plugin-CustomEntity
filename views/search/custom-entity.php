@@ -26,7 +26,7 @@ $this->breadcrumb = [
 ?>
 <search page-title="<?= htmlspecialchars($definition->text(i::__('Entidades'))) ?>" entity-type="<?= $definition->slug ?>" :initial-pseudo-query="{}">
     <template #create-button>
-        <create-custom-entity v-if="global.auth.isLoggedIn" :editable="true" #default="{modal}">
+        <create-custom-entity v-if="global.auth.isLoggedIn" type="<?= $definition->slug ?>" :editable="true" #default="{modal}">
             <button @click="modal.open()" class="button button--primary button--icon">
                 <mc-icon name="add"></mc-icon>
                 <span><?= $definition->text(i::__('Criar Entidade')) ?></span>
