@@ -33,9 +33,18 @@ class LongDescription extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
+        $self = $this;
+
         $app->hook("template({$entity_definition->slug}.edit.tab-info--content):begin", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/long-description');
+        });
+
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($self) {
+            /** @var Theme $this */
+            if ($self->isRequired) {
+                $this->part('custom-entity/edit/long-description');
+            }
         });
     }
 }
