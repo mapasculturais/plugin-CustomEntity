@@ -112,7 +112,7 @@ class MetadataField extends Part
     {
         $app = App::i();
 
-        // $app->registerMetadata(new Metadata($))
+        $app->registerMetadata($this->definition, $entity_definition->entityClassName);
     }
 
     public function init(EntityDefinition $entity_definition)
