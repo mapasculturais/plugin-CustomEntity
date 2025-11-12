@@ -4,19 +4,18 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
-use CustomEntity\Traits;
 use MapasCulturais\App;
-use MapasCulturais\Definitions\Metadata;
-use MapasCulturais\i;
+use MapasCulturais\Definitions\Metadata as MetadataDefinition;
 
 class MetadataField extends Part
 {
-    protected Metadata $definition;
+    protected ?MetadataDefinition $definition = null;
+    protected array $config;
 
     function __construct(
-        public readonly array $name
+        public readonly string $name
     ) {
-        $this->definition = new Metadata($name, []);
+        $this->config = [];
     }
 
     static function add($name = null): static
@@ -34,70 +33,72 @@ class MetadataField extends Part
 
     public function type(string $type): static
     {
-        $this->definition->type = $type;
+        $this->config['type'] = $type;
         return $this;
     }
 
     public function fieldType(string $type): static
     {
-        $this->definition->field_type = $type;
+        $this->config['field_type'] = $type;
         return $this;
     }
 
     public function label(string $label): static
     {
-        $this->definition->label = $label;
+        $this->config['label'] = $label;
         return $this;
     }
 
     public function defaultValue($default_value): static
     {
-        $this->definition->default_value = $default_value;
+        $this->config['default_value'] = $default_value;
         return $this;
     }
 
     public function required(string $error_message = ''): static
     {
-        $this->definition->is_required = true;
-        $this->definition->is_required_error_message = $error_message;
+        $validations = $this->config['validations'] ?? [];
+        $validations['required'] = $error_message;
+        $this->config['validations'] = $validations;
         return $this;
     }
 
     public function unique(string $error_message = ''): static
     {
-        $this->definition->is_unique = true;
-        $this->definition->is_unique_error_message = $error_message;
+        $validations = $this->config['validations'] ?? [];
+        $validations['unique'] = $error_message;
+        $this->config['validations'] = $validations;
         return $this;
     }
 
     public function private(): static
     {
-        $this->definition->private = true;
+        $this->config['private'] = true;
         return $this;
     }
 
     public function serializer(callable $serializer): static
     {
-        $this->definition->serialize = $serializer;
+        $this->config['serialize'] = $serializer;
         return $this;
     }
 
     public function unserializer(callable $unserializer): static
     {
-        $this->definition->unserialize = $unserializer;
+        $this->config['unserialize'] = $unserializer;
         return $this;
     }
 
     public function readonly(): static
     {
-        $this->definition->readonly = true;
+        $this->config['readonly'] = true;
         return $this;
     }
 
     public function options(array $options, bool $numeric_key_value = false): static
     {
-        $this->definition->options = $options;
-        $this->definition->numericKeyValueOptions = $numeric_key_value;
+        $this->config['options'] = $options;
+        $this->config['numericKeyValueOptions'] = $numeric_key_value;
         return $this;
     }
 
@@ -108,28 +109,37 @@ class MetadataField extends Part
         ];
     }
 
+    protected function getDefinition(): MetadataDefinition
+    {
+        $this->definition = new MetadataDefinition($this->name, $this->config);
+
+        return $this->definition;
+    }
+
     public function register(EntityDefinition $entity_definition)
     {
         $app = App::i();
 
-        $app->registerMetadata($this->definition, $entity_definition->entityClassName);
+        $app->registerMetadata($this->getDefinition(), $entity_definition->entityClassName);
     }
 
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
         $self = $this;
+
         $app->hook("template({$entity_definition->slug}.edit.tab-info--content):begin", function () use($self) {
             /** @var Theme $this */
-            /** @var MetadataField $self  */
+
             $this->part('custom-entity/edit/metadata', ['definition' => $self->definition]);
         });
 
-        /** @todo somente se obrigatório */
-        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () {
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use($self) {
             /** @var Theme $this */
-            /** @var MetadataField $self  */
-            $this->part('custom-entity/edit/metadata', ['definition' => $self->definition]);
+
+            if($self->definition->is_required) {
+                $this->part('custom-entity/edit/metadata', ['definition' => $self->definition]);
+            }
         });
     }
 }
