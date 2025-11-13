@@ -18,20 +18,13 @@ $definition = Plugin::$intance->getEntityDefinition();
     <label class="form__label">
         <?= $definition->text(i::__('Filtros da entidade')) ?>
     </label>
+    <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'begin') ?>
     <form class="form" @submit="$event.preventDefault()">
         <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'before') ?>
-        <div class="field search-filter__<?= $definition->slug ?>-status">
-            <label> <?= $definition->text(i::__('Status da entidade')) ?> </label>
-            <?php $this->applyTemplateHook("search-filter-{$definition->slug}-field", 'before') ?>
-            <label class="verified">
-                <input v-model="pseudoQuery['@verified']" type="checkbox">
-                <?= $definition->text(i::__('Somente verificadas')) ?>
-            </label>
-            <?php $this->applyTemplateHook("search-filter-{$definition->slug}-field", 'after') ?>
-        </div>
-        <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'end') ?>
+        
+        <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'after') ?>
     </form>
-    <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'after') ?>
+    <?php $this->applyTemplateHook("search-filter-{$definition->slug}", 'end') ?>
     <a class="clear-filter" @click="clearFilters()"><?= $definition->text(i::__('Limpar todos os filtros')) ?></a>
 </search-filter>
 

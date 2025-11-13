@@ -25,6 +25,12 @@ class Seals extends Part
             /** @var Theme $this */
             $this->part('custom-entity/single/seals');
         });
+
+        $app->hook("template(search.{$entity_definition->slug}.search-filter-{$entity_definition->slug}):before", function () {
+            /** @var Theme $this */
+
+            $this->part('custom-entity/search/seals');
+        });
     }
 }
 
