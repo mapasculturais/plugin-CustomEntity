@@ -91,11 +91,20 @@ class Taxonomy extends Part
             $this->part('custom-entity/single/taxonomy', ['taxonomy' => $taxonomy]);
         });
 
-        $app->hook("template(search.{$entity_definition->slug}.search-filter-{$entity_definition->slug}):end", function () use ($app, $self) {
+        $app->hook("template(search.{$entity_definition->slug}.search-filter-{$entity_definition->slug}):after", function () use ($app, $self) {
             /** @var Theme $this */
 
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
             $this->part('custom-entity/search/taxonomy', ['taxonomy' => $taxonomy]);
+        });
+
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($app, $self) {
+            /** @var Theme $this */
+            $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
+            
+            if($taxonomy->required) {
+                $this->part('custom-entity/edit/taxonomy', ['taxonomy' => $taxonomy]);
+            }
         });
     }
 }
