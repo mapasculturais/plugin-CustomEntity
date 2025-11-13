@@ -26,7 +26,7 @@ class Administrators extends Part
             $this->part('custom-entity/edit/administrators');
         });
         
-        $app->hook("template({$entity_definition->slug}.single.tab-info--container):begin", function () {
+        $app->hook("template({$entity_definition->slug}.single.tab-info--aside):end", function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/administrators');
         });
