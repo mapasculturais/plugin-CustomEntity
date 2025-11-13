@@ -33,5 +33,12 @@ class ImageGallery extends Part
             /** @var Theme $this */
             $this->part('custom-entity/edit/image-gallery');
         });
+
+        $app->hook("template({$entity_definition->slug}.single.tab-info--main):end", function () {
+            /** @var Theme $this */
+            $this->part('custom-entity/single/image-gallery');
+        });
+
+
     }
 }

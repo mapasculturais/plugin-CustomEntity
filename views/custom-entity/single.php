@@ -56,7 +56,7 @@ $this->breadcrumb = [
                         <?php $this->applyTemplateHook('tab-info--main','begin') ?>
                         <?php $this->applyTemplateHook('tab-info--main','end') ?>
                     </main>
-                    <?php $this->applyTemplateHook('tab-info--main','before') ?>
+                    <?php $this->applyTemplateHook('tab-info--main','after') ?>
                     
                     <?php $this->applyTemplateHook('tab-info--aside','before') ?>
                     <aside class="grid-12">

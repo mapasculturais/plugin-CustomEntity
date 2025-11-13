@@ -115,7 +115,9 @@ class MetadataField extends Part
 
     protected function getDefinition(): MetadataDefinition
     {
-        $this->definition = new MetadataDefinition($this->name, $this->config);
+        if (!$this->definition) {
+            $this->definition = new MetadataDefinition($this->name, $this->config);
+        }
 
         return $this->definition;
     }
@@ -130,20 +132,25 @@ class MetadataField extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        $self = $this;
+        
+        $definition = $this->getDefinition();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):begin", function () use($self) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):begin", function () use ($definition) {
             /** @var Theme $this */
 
-            $this->part('custom-entity/edit/metadata', ['definition' => $self->definition]);
+            $this->part('custom-entity/edit/metadata', ['definition' => $definition]);
         });
 
-        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use($self) {
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($definition) {
             /** @var Theme $this */
-
-            if($self->definition->is_required) {
-                $this->part('custom-entity/edit/metadata', ['definition' => $self->definition]);
+            if ($definition->is_required) {
+                $this->part('custom-entity/edit/metadata', ['definition' => $definition]);
             }
+        });
+
+        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () use ($definition) {
+            /** @var Theme $this */
+            $this->part('custom-entity/single/entity-data', ['property' =>  $definition->key]);
         });
     }
 }
