@@ -31,7 +31,11 @@ $this->breadcrumb = [
     <?php $this->applyTemplateHook('main-app','begin') ?>
     <mc-breadcrumb></mc-breadcrumb>
     <?php $this->applyTemplateHook('header','before') ?>
-    <entity-header :entity="entity" editable></entity-header>
+    <entity-header :entity="entity" editable>
+        <template #title-edit>
+            <h2><?= $definition->text(i::__('Edição da entidade')) ?></h2>
+        </template>
+    </entity-header>
     <?php $this->applyTemplateHook('header','after') ?>
 
     <?php $this->applyTemplateHook('tabs','before') ?>
