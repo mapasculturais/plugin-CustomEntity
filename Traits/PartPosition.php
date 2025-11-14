@@ -2,6 +2,7 @@
 
 namespace CustomEntity\Traits;
 
+use CustomEntity\EntityDefinition;
 use CustomEntity\Position;
 
 /**
@@ -36,5 +37,13 @@ trait PartPosition {
     public function singlePosition(string $section = 'more-info', string $anchor = 'end', int $priority = 10): static {
         $this->_singlePosition = new Position($section, $anchor, $priority);
         return $this;
+    }
+
+    public function editTemplateHook(EntityDefinition $entityDefinition, callable $callable): void {
+        $this->editPosition->templateHook("{$entityDefinition->slug}.edit", $callable);
+    }
+
+    public function singleTemplateHook(EntityDefinition $entityDefinition, callable $callable): void {
+        $this->singlePosition->templateHook("{$entityDefinition->slug}.single", $callable);
     }
 }

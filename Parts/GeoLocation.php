@@ -88,7 +88,7 @@ class GeoLocation extends Part
         $app = App::i();
         $self = $this;
 
-        $this->editPosition->templateHook("{$entity_definition->slug}.edit", function () use ($self) {
+        $this->editTemplateHook($entity_definition, function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/geo-location', [
                 'showLatLongFields' => $self->showLatLongFields,
@@ -111,7 +111,7 @@ class GeoLocation extends Part
             $this->part('custom-entity/search/geo-location');
         });
 
-        $this->singlePosition->templateHook("{$entity_definition->slug}.single", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/geo-location');
         });
