@@ -4,13 +4,15 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
-use MapasCulturais\App;
+use CustomEntity\Traits\PartPosition;
 use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
 
 class Downloads extends Part
 {
+    use PartPosition;
+
     public function getSubParts(): array
     {
         return [
@@ -27,13 +29,12 @@ class Downloads extends Part
 
     public function init(EntityDefinition $entity_definition)
     {
-        $app = App::i();
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):end", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/downloads');
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):end", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/downloads');
         });

@@ -10,14 +10,14 @@ use CustomEntity\Position;
  * @property-read Position $singlePosition
  */
 trait PartPosition {
-    public readonly ?Position $_editPosition;
-    public readonly ?Position $_singlePosition;
+    private readonly ?Position $_editPosition;
+    private readonly ?Position $_singlePosition;
 
-    public function getDefaultEditPosition(): Position {
+    protected function getDefaultEditPosition(): Position {
         return new Position('more-info', 'end', 10);
     }
 
-    public function getDefaultSinglePosition(): Position {
+    protected function getDefaultSinglePosition(): Position {
         return new Position('more-info', 'end', 10);
     }
 

@@ -24,14 +24,14 @@ class GeoLocation extends Part
         return $this;
     }
 
-    public function getDefaultEditPosition(): Position
+    protected function getDefaultEditPosition(): Position
     {
         return new Position('more-info', 'begin');
     }
 
-    public function getDefaultSinglePosition(): Position
+    protected function getDefaultSinglePosition(): Position
     {
-        return new Position('main', 'begin');
+        return new Position('more-info', 'begin');
     }
 
     public function getEntityTraits(): array
