@@ -4,12 +4,15 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
+use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\Metadata as MetadataDefinition;
 
 class MetadataField extends Part
 {
     use Traits\Keywords;
+    use PartPosition;
 
     protected ?MetadataDefinition $definition = null;
     protected array $config;
@@ -115,6 +118,15 @@ class MetadataField extends Part
         ];
     }
 
+    protected function getDefaultEditPosition(): Position {
+        return new Position('more-info', 'begin');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position('more-info', 'begin');
+    }
+
     protected function getDefinition(): MetadataDefinition
     {
         if (!$this->definition) {
@@ -138,7 +150,7 @@ class MetadataField extends Part
 
         $metadata_definition = $this->getDefinition();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($metadata_definition) {
+        $this->editTemplateHook($entity_definition, function () use ($metadata_definition) {
             /** @var Theme $this */
 
             $this->part('custom-entity/edit/metadata', ['definition' => $metadata_definition]);
@@ -151,7 +163,7 @@ class MetadataField extends Part
             }
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () use ($metadata_definition) {
+        $this->singleTemplateHook($entity_definition, function () use ($metadata_definition) {
             /** @var Theme $this */
             $this->part('custom-entity/single/entity-data', ['property' =>  $metadata_definition->key]);
         });

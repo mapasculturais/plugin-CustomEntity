@@ -20,7 +20,7 @@ class Seals extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        
+
         $app->hook("template({$entity_definition->slug}.single.tab-info--container):begin", function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/seals');

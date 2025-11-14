@@ -4,6 +4,8 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
+use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\Taxonomy as DefinitionsTaxonomy;
 use MapasCulturais\Themes\BaseV2\Theme;
@@ -12,7 +14,8 @@ use MapasCulturais\Themes\BaseV2\Theme;
 class Taxonomy extends Part
 {
     use Traits\Keywords;
-    
+    use PartPosition;
+
     public readonly string $taxonomyDescription;
     protected array $restrictedTerms = [];
 
@@ -39,6 +42,16 @@ class Taxonomy extends Part
         $this->restrictedTerms = $terms;
 
         return $this;
+    }
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position('aside', 'begin');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position('aside', 'begin');
     }
 
     public function getSubParts(): array
@@ -76,15 +89,14 @@ class Taxonomy extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () use ($app, $self) {
+        $this->editTemplateHook($entity_definition, function () use ($app, $self) {
             /** @var Theme $this */
 
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
             $this->part('custom-entity/edit/taxonomy', ['taxonomy' => $taxonomy]);
         });
 
-
-        $app->hook("template({$entity_definition->slug}.single.tab-info--aside):begin", function () use ($app, $self) {
+        $this->singleTemplateHook($entity_definition, function () use ($app, $self) {
             /** @var Theme $this */
 
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
@@ -128,7 +140,7 @@ class Taxonomy extends Part
                 /** @var Taxonomy $self */
                 $alias = ":$alias";
                 $t_alias = "$t_alias.term";
-                
+
                 if($self->unnaccentKeyword) {
                     $t_alias = "unaccent($t_alias)";
                     $alias = "unaccent($alias)";

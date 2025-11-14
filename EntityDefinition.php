@@ -31,8 +31,8 @@ class EntityDefinition
 
         /** @var Part[] */
         public readonly array $parts = [],
-        ?array $singleSections = null,
         ?array $editSections = null,
+        ?array $singleSections = null,
 
         public ?string $entity = null,
         public ?string $table = null,

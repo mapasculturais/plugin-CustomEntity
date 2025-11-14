@@ -4,6 +4,8 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
+use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\i;
 use MapasCulturais\Traits as MapasTraits;
@@ -11,6 +13,8 @@ use MapasCulturais\Types\GeoPoint;
 
 class GeoLocation extends Part
 {
+    use PartPosition;
+
     protected bool $showLatLongFields = false;
 
     public function showLatLongFields(bool $show = true): static
@@ -18,6 +22,16 @@ class GeoLocation extends Part
         $this->showLatLongFields = $show;
 
         return $this;
+    }
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position('more-info', 'begin');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position('more-info', 'begin');
     }
 
     public function getEntityTraits(): array
@@ -74,7 +88,7 @@ class GeoLocation extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($self) {
+        $this->editTemplateHook($entity_definition, function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/geo-location', [
                 'showLatLongFields' => $self->showLatLongFields,
@@ -97,7 +111,7 @@ class GeoLocation extends Part
             $this->part('custom-entity/search/geo-location');
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/geo-location');
         });

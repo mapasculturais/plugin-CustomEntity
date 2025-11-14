@@ -41,7 +41,7 @@ $this->breadcrumb = [
         </template>
     </entity-header>
     <?php $this->applyTemplateHook('header','after') ?>
-    
+
     <?php $this->applyTemplateHook('tabs','before') ?>
     <mc-tabs class="tabs" sync-hash>
         <?php $this->applyTemplateHook('tabs','begin') ?>
@@ -50,22 +50,51 @@ $this->breadcrumb = [
             <div class="tabs__info">
                 <mc-container>
                     <?php $this->applyTemplateHook('tab-info--container','begin') ?>
-                    
+
                     <?php $this->applyTemplateHook('tab-info--main','before') ?>
                     <main class="grid-12">
                         <?php $this->applyTemplateHook('tab-info--main','begin') ?>
                         <?php $this->applyTemplateHook('tab-info--main','end') ?>
                     </main>
                     <?php $this->applyTemplateHook('tab-info--main','after') ?>
-                    
+
                     <?php $this->applyTemplateHook('tab-info--aside','before') ?>
                     <aside class="grid-12">
                         <?php $this->applyTemplateHook('tab-info--aside','begin') ?>
                         <?php $this->applyTemplateHook('tab-info--aside','end') ?>
                     </aside>
                     <?php $this->applyTemplateHook('tab-info--aside','after') ?>
-                    
+
                     <?php $this->applyTemplateHook('tab-info--container', 'end') ?>
+                </mc-container>
+
+                <mc-container>
+                    <?php $this->applyTemplateHook('tab-info--sections','before') ?>
+                    <div class="entity-sections">
+                        <?php $this->applyTemplateHook('tab-info--sections','begin') ?>
+
+                        <?php foreach($definition->singleSections as $section_slug => $section_title): ?>
+                            <?php $this->applyTemplateHook("tab-info--{$section_slug}",'before') ?>
+                            <section class="grid-12">
+                                <h2 class="col-12"><?= $section_title ?></h2>
+                                <?php $this->applyTemplateHook("tab-info--{$section_slug}",'begin') ?>
+                                <?php $this->applyTemplateHook("tab-info--{$section_slug}",'end') ?>
+                            </section>
+                            <?php $this->applyTemplateHook("tab-info--{$section_slug}",'after') ?>
+                        <?php endforeach; ?>
+
+                        <?php $this->applyTemplateHook('tab-info--sections','end') ?>
+                    </div>
+                    <?php $this->applyTemplateHook('tab-info--sections','after') ?>
+
+                    <?php $this->applyTemplateHook('tab-info--bottom-aside','before') ?>
+                    <aside class="grid-12">
+                        <?php $this->applyTemplateHook('tab-info--bottom-aside','begin') ?>
+                        <?php $this->applyTemplateHook('tab-info--bottom-aside','end') ?>
+                    </aside>
+                    <?php $this->applyTemplateHook('tab-info--bottom-aside','after') ?>
+
+                    <?php $this->applyTemplateHook('tab-info--sections', 'end') ?>
                 </mc-container>
             </div>
             <?php $this->applyTemplateHook('tab-info','end') ?>
@@ -73,7 +102,7 @@ $this->breadcrumb = [
         <?php $this->applyTemplateHook('tabs','end') ?>
     </mc-tabs>
     <?php $this->applyTemplateHook('tabs','after') ?>
-    
+
     <entity-actions :entity="entity"></entity-actions>
     <?php $this->applyTemplateHook('main-app','end') ?>
 </div>
