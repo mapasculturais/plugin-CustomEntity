@@ -1,0 +1,40 @@
+<?php
+
+namespace CustomEntity\Traits;
+
+use CustomEntity\Position;
+
+/**
+ * @property-read Position $editPosition
+ * @property-read Position $singlePosition
+ */
+trait PartPosition {
+    public readonly ?Position $_editPosition;
+    public readonly ?Position $_singlePosition;
+
+    public function getDefaultEditPosition(): Position {
+        return new Position('more-info', 'end', 10);
+    }
+
+    public function getDefaultSinglePosition(): Position {
+        return new Position('more-info', 'end', 10);
+    }
+
+    public function getEditPosition(): Position {
+        return $this->_editPosition ?? $this->getDefaultEditPosition();
+    }
+
+    public function getSinglePosition(): Position {
+        return $this->_singlePosition ?? $this->getDefaultSinglePosition();
+    }
+
+    public function editPosition(string $section = 'more-info', string $anchor = 'end', int $priority = 10): static {
+        $this->_editPosition = new Position($section, $anchor, $priority);
+        return $this;
+    }
+
+    public function singlePosition(string $section = 'more-info', string $anchor = 'end', int $priority = 10): static {
+        $this->_singlePosition = new Position($section, $anchor, $priority);
+        return $this;
+    }
+}
