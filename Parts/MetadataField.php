@@ -9,6 +9,8 @@ use MapasCulturais\Definitions\Metadata as MetadataDefinition;
 
 class MetadataField extends Part
 {
+    use Traits\Keywords;
+
     protected ?MetadataDefinition $definition = null;
     protected array $config;
 
@@ -132,25 +134,55 @@ class MetadataField extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
+        $self = $this;
 
-        $definition = $this->getDefinition();
+        $metadata_definition = $this->getDefinition();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($definition) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($metadata_definition) {
             /** @var Theme $this */
 
-            $this->part('custom-entity/edit/metadata', ['definition' => $definition]);
+            $this->part('custom-entity/edit/metadata', ['definition' => $metadata_definition]);
         });
 
-        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($definition) {
+        $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($metadata_definition) {
             /** @var Theme $this */
-            if ($definition->is_required) {
-                $this->part('custom-entity/edit/metadata', ['definition' => $definition]);
+            if ($metadata_definition->is_required) {
+                $this->part('custom-entity/edit/metadata', ['definition' => $metadata_definition]);
             }
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () use ($definition) {
+        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () use ($metadata_definition) {
             /** @var Theme $this */
-            $this->part('custom-entity/single/entity-data', ['property' =>  $definition->key]);
+            $this->part('custom-entity/single/entity-data', ['property' =>  $metadata_definition->key]);
         });
+
+
+        // keywords
+        if($this->useAsKeyword) {
+            $meta_alias = uniqid("meta_{$metadata_definition->key}_");
+            $meta_key = $metadata_definition->key;
+
+            $this->keywordJoin($entity_definition, function (&$joins, $keyword, $alias) use($meta_alias, $meta_key) {
+                $joins .= "\n LEFT JOIN e.__metadata {$meta_alias} WITH {$meta_alias}.key = '{$meta_key}'";
+            });
+            
+            $this->keywordWhere($entity_definition, function (&$where, $keyword, $alias) use ($meta_alias, $self) {
+                $alias = ':' . $alias;
+                $entity_side = "{$meta_alias}.value";
+
+                if($self->unnaccentKeyword) {
+                    $entity_side = "unaccent($entity_side)";
+                    $alias = "unaccent($alias)";
+                }
+
+                if($self->lowerKeyword) {
+                    $entity_side = "lower($entity_side)";
+                    $alias = "lower($alias)";
+                }
+
+                $where .= "\n OR $entity_side LIKE $alias";
+                
+            });
+        }
     }
 }

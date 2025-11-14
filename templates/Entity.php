@@ -10,7 +10,7 @@ use CustomEntity\Traits as Traits;
 use MapasCulturais\App;
 
 #[ORM\Table(name: "_ENTITY_TABLE_")]
-#[ORM\Entity(repositoryClass: "MapasCulturais\Repository")]
+#[ORM\Entity(repositoryClass: "CustomEntity\Repository")]
 #[ORM\HasLifecycleCallbacks]
 
 class _ENTITY_NAME_ extends Entity

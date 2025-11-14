@@ -5,14 +5,14 @@ namespace CustomEntity\Parts;
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
 use MapasCulturais\App;
-use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\Definitions\Taxonomy as DefinitionsTaxonomy;
-use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
 
 /** @package CustomEntity\Parts */
 class Taxonomy extends Part
 {
+    use Traits\Keywords;
+    
     public readonly string $taxonomyDescription;
     protected array $restrictedTerms = [];
 
@@ -106,5 +106,40 @@ class Taxonomy extends Part
                 $this->part('custom-entity/edit/taxonomy', ['taxonomy' => $taxonomy]);
             }
         });
+
+        // keywords
+        if($this->useAsKeyword) {
+            $taxonomy_slug = $this->taxonomySlug;
+            $t_alias = uniqid("{$taxonomy_slug}_t_");
+            $tr_alias = uniqid("{$taxonomy_slug}_tr_");
+
+            $this->keywordJoin($entity_definition, function (&$joins, $keyword, $alias) use($taxonomy_slug, $tr_alias, $t_alias) {
+                /** @var \MapasCulturais\Repository $this */
+                /** @var Taxonomy $self */
+
+                $joins .= "LEFT JOIN e.__termRelations {$tr_alias}
+                    LEFT JOIN $tr_alias.term {$t_alias}
+                        WITH
+                            {$t_alias}.taxonomy = '$taxonomy_slug'";
+            });
+            
+            $this->keywordWhere($entity_definition, function (&$where, $keyword, $alias) use ($t_alias, $self) {
+                /** @var \MapasCulturais\Repository $this */
+                /** @var Taxonomy $self */
+                $alias = ":$alias";
+                $t_alias = "$t_alias.term";
+                
+                if($self->unnaccentKeyword) {
+                    $t_alias = "unaccent($t_alias)";
+                    $alias = "unaccent($alias)";
+                }
+
+                if($self->lowerKeyword) {
+                    $t_alias = "lower($t_alias)";
+                    $alias = "lower($alias)";
+                }
+                $where .= " OR {$t_alias} LIKE {$alias} ";
+            });
+        }
     }
 }
