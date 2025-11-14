@@ -88,9 +88,12 @@ $this->breadcrumb = [
                 <aside>
                     <mc-card>
                         <template #content>
+                            <?php $this->applyTemplateHook('tab-info--bottom-aside','before') ?>
                             <div class="grid-12">
-
+                                <?php $this->applyTemplateHook('tab-info--bottom-aside','begin') ?>
+                                <?php $this->applyTemplateHook('tab-info--bottom-aside','end') ?>
                             </div>
+                            <?php $this->applyTemplateHook('tab-info--bottom-aside','after') ?>
                         </template>
                     </mc-card>
                 </aside>
