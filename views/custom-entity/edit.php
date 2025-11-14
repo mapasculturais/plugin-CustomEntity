@@ -53,16 +53,16 @@ $this->breadcrumb = [
                         <?php $this->applyTemplateHook('tab-info--title','end') ?>
                     </template>
                     <template #content>
-                        <?php $this->applyTemplateHook('tab-info--content','before') ?>
+                        <?php $this->applyTemplateHook('tab-info--main','before') ?>
                         <div class="grid-12 v-center">
-                            <?php $this->applyTemplateHook('tab-info--content','begin') ?>
-                            <?php $this->applyTemplateHook('tab-info--content','end') ?>
+                            <?php $this->applyTemplateHook('tab-info--main','begin') ?>
+                            <?php $this->applyTemplateHook('tab-info--main','end') ?>
                         </div>
-                        <?php $this->applyTemplateHook('tab-info--content','after') ?>
+                        <?php $this->applyTemplateHook('tab-info--main','after') ?>
                         <div class="divider"></div>
                         <div class="right">
-                            <?php $this->applyTemplateHook('tab-info--content--right','begin') ?>
-                            <?php $this->applyTemplateHook('tab-info--content--right','end') ?>
+                            <?php $this->applyTemplateHook('tab-info--aside','begin') ?>
+                            <?php $this->applyTemplateHook('tab-info--aside','end') ?>
                         </div>
                     </template>
                 </mc-card>
@@ -87,7 +87,7 @@ $this->breadcrumb = [
                     <mc-card>
                         <template #content>
                             <div class="grid-12">
-                                
+
                             </div>
                         </template>
                     </mc-card>

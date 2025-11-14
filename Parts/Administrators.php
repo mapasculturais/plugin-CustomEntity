@@ -20,12 +20,12 @@ class Administrators extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content--right):begin", function () {
+
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/administrators');
         });
-        
+
         $app->hook("template({$entity_definition->slug}.single.tab-info--aside):end", function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/administrators');

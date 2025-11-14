@@ -28,8 +28,8 @@ class Header extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content):begin", function () use ($entity_definition) {
+
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--main):begin", function () use ($entity_definition) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/header');
         });

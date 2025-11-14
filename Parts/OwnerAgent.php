@@ -28,7 +28,7 @@ class OwnerAgent extends OwnerPart
     {
         $app = App::i();
         $self = $this;
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content--right):end", function () use ($self) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):end", function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/owner-agent', ['label' => $self->label]);
         });

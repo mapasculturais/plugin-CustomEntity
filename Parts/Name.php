@@ -81,8 +81,8 @@ class Name extends Part
     {
         $app = App::i();
         $self = $this;
-        
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content):begin", function () {
+
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--main):begin", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/name');
         });

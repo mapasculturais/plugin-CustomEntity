@@ -76,7 +76,7 @@ class Taxonomy extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content--right):begin", function () use ($app, $self) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () use ($app, $self) {
             /** @var Theme $this */
 
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
@@ -101,7 +101,7 @@ class Taxonomy extends Part
         $app->hook("template(<<*>>.<<*>>.create-{$entity_definition->slug}__fields):begin", function () use ($app, $self) {
             /** @var Theme $this */
             $taxonomy = $app->getRegisteredTaxonomyBySlug($self->taxonomySlug);
-            
+
             if($taxonomy->required) {
                 $this->part('custom-entity/edit/taxonomy', ['taxonomy' => $taxonomy]);
             }

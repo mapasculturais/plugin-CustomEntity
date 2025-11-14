@@ -152,7 +152,7 @@ class SocialMedia extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--content--right):begin", function () {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/social-media');
         });
