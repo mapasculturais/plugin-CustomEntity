@@ -132,10 +132,10 @@ class MetadataField extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        
+
         $definition = $this->getDefinition();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):begin", function () use ($definition) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($definition) {
             /** @var Theme $this */
 
             $this->part('custom-entity/edit/metadata', ['definition' => $definition]);

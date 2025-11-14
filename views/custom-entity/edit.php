@@ -68,19 +68,21 @@ $this->breadcrumb = [
                 </mc-card>
                 <main>
                     <?php $this->applyTemplateHook('main-mc-card','begin') ?>
-                    <mc-card>
-                        <template #title>
-                            <label><?php i::_e("Mais informações"); ?></label>
-                        </template>
-                        <template #content>
-                            <?php $this->applyTemplateHook('tab-info--more','before') ?>
-                            <div class="grid-12">
-                                <?php $this->applyTemplateHook('tab-info--more','begin') ?>
-                                <?php $this->applyTemplateHook('tab-info--more','end') ?>
-                            </div>
-                            <?php $this->applyTemplateHook('tab-info--more','after') ?>
-                        </template>
-                    </mc-card>
+                    <?php foreach ($definition->editSections as $section_slug => $section_title): ?>
+                        <mc-card>
+                            <template #title>
+                                <label><?= $section_title ?></label>
+                            </template>
+                            <template #content>
+                                <?php $this->applyTemplateHook("tab-info--{$section_slug}",'before') ?>
+                                <div class="grid-12">
+                                    <?php $this->applyTemplateHook("tab-info--{$section_slug}",'begin') ?>
+                                    <?php $this->applyTemplateHook("tab-info--{$section_slug}",'end') ?>
+                                </div>
+                                <?php $this->applyTemplateHook("tab-info--{$section_slug}",'after') ?>
+                            </template>
+                        </mc-card>
+                    <?php endforeach; ?>
                     <?php $this->applyTemplateHook('main-mc-card','end') ?>
                 </main>
                 <aside>

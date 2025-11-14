@@ -3,9 +3,9 @@
 namespace CustomEntity;
 
 use MapasCulturais\App;
-use MapasCulturais\Controller;
 use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\Definitions\Metadata;
+use MapasCulturais\i;
 
 class EntityDefinition
 {
@@ -14,6 +14,8 @@ class EntityDefinition
     public readonly EntityGenerator $entityGenerator;
     public readonly ControllerGenerator $controllerGenerator;
     public readonly EntityCssGenerator $entityCssGenerator;
+    public readonly array $editSections;
+    public readonly array $singleSections;
 
     function __construct(
         public readonly string $slug,
@@ -26,10 +28,12 @@ class EntityDefinition
         public readonly string $icon = 'app',
         public readonly string $color = '#19d758',
         public readonly array $texts = [],
-        
+
         /** @var Part[] */
         public readonly array $parts = [],
-        
+        ?array $singleSections = null,
+        ?array $editSections = null,
+
         public ?string $entity = null,
         public ?string $table = null,
     ) {
@@ -43,6 +47,12 @@ class EntityDefinition
         $this->entityClassName = $this->entityGenerator->className;
         $this->controllerClassName = $this->controllerGenerator->className;
 
+        $this->editSections = $editSections ?? [
+            'more-info' => i::__('Mais informações'),
+        ];
+        $this->singleSections = $singleSections ?? [
+            'more-info' => i::__('Mais informações'),
+        ];
     }
 
     function init()

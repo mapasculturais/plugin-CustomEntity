@@ -74,7 +74,7 @@ class GeoLocation extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):begin", function () use ($self) {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):begin", function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/geo-location', [
                 'showLatLongFields' => $self->showLatLongFields,

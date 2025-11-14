@@ -28,7 +28,7 @@ class Downloads extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more):end", function () {
+        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):end", function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/downloads');
         });
