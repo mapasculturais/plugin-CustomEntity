@@ -9,6 +9,7 @@ use MapasCulturais\App;
 use MapasCulturais\Definitions\EntityType;
 use MapasCulturais\i;
 use MapasCulturais\Traits as MapasTraits;
+use MapasCulturais\Themes\BaseV2\Theme;
 
 class Type extends Part
 {
@@ -69,5 +70,13 @@ class Type extends Part
             /** @var Theme $this */
             $this->part('custom-entity/edit/type');
         }, -10);
+
+        $types = $this->types;
+
+        $app->hook("template(search.{$entity_definition->slug}.search-filter-{$entity_definition->slug}):after", function () use ($types) {
+            /** @var Theme $this */
+
+            $this->part('custom-entity/search/type', ['types' => $types]);
+        });
     }
 }
