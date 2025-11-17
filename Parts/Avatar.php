@@ -4,6 +4,8 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Parts\Traits as PartTraits;
+use CustomEntity\Position;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\i;
@@ -12,6 +14,13 @@ use MapasCulturais\Traits;
 
 class Avatar extends Part
 {
+    use PartTraits\PartPosition;
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'main', anchor: 'begin');
+    }
+
     public function getSubParts(): array
     {
         return [
@@ -36,7 +45,7 @@ class Avatar extends Part
     public function init(EntityDefinition $entity_definition)
     {
         $app = App::i();
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--main):begin", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/avatar');
         });

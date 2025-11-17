@@ -4,12 +4,26 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\OwnerPart;
+use CustomEntity\Parts\Traits as PartTraits;
+use CustomEntity\Position;
 use MapasCulturais\App;
 use MapasCulturais\Traits;
 
 class OwnerAgent extends OwnerPart
 {
+    use PartTraits\PartPosition;
+
     public ?string $label = null;
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'aside', anchor: 'end');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position(section: 'aside', anchor: 'end');
+    }
 
     public function getEntityTraits(): array
     {
@@ -28,12 +42,12 @@ class OwnerAgent extends OwnerPart
     {
         $app = App::i();
         $self = $this;
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):end", function () use ($self) {
+        $this->editTemplateHook($entity_definition, function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/edit/owner-agent', ['label' => $self->label]);
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--aside):end", function () use ($self) {
+        $this->singleTemplateHook($entity_definition, function () use ($self) {
             /** @var Theme $this */
             $this->part('custom-entity/single/owner-agent', ['label' => $self->label]);
         });

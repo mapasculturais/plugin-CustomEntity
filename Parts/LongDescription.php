@@ -4,12 +4,26 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Parts\Traits as PartTraits;
+use CustomEntity\Position;
 use CustomEntity\Traits;
 use MapasCulturais\App;
 use MapasCulturais\i;
 
 class LongDescription extends Part
 {
+    use PartTraits\PartPosition;
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'main', anchor: 'begin');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position(section: 'main', anchor: 'begin');
+    }
+
     public function getEntityTraits(): array
     {
         return [
@@ -35,7 +49,7 @@ class LongDescription extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--main):begin", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/long-description');
         });
@@ -47,7 +61,7 @@ class LongDescription extends Part
             }
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):begin", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/long-description');
         });

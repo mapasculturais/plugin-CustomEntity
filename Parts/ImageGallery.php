@@ -11,6 +11,8 @@ use MapasCulturais\Themes\BaseV2\Theme;
 
 class ImageGallery extends Part
 {
+    use Traits\PartPosition;
+
     public function getSubParts(): array
     {
         return [
@@ -29,12 +31,12 @@ class ImageGallery extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--more-info):end", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/image-gallery');
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--main):end", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/image-gallery');
         });

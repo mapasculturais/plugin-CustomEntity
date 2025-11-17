@@ -4,12 +4,24 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
 use MapasCulturais\App;
-use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
 
 class RelatedAgents extends Part
 {
+    use Traits\PartPosition;
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'aside', anchor: 'begin');
+    }
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position(section: 'aside', anchor: 'end');
+    }
+
     public function getSubParts(): array
     {
         return [
@@ -21,15 +33,14 @@ class RelatedAgents extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/related-agents');
         });
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--aside):end", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/related-agents');
         });
     }
 }
-

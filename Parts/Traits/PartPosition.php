@@ -14,11 +14,11 @@ trait PartPosition {
     private readonly ?Position $_singlePosition;
 
     protected function getDefaultEditPosition(): Position {
-        return new Position('more-info', 'end', 10);
+        return new Position(section: 'more-info', anchor: 'end', priority: 10);
     }
 
     protected function getDefaultSinglePosition(): Position {
-        return new Position('more-info', 'end', 10);
+        return new Position(section: 'more-info', anchor: 'end', priority: 10);
     }
 
     public function getEditPosition(): Position {
@@ -30,12 +30,12 @@ trait PartPosition {
     }
 
     public function editPosition(string $section = 'more-info', string $anchor = 'end', int $priority = 10): static {
-        $this->_editPosition = new Position($section, $anchor, $priority);
+        $this->_editPosition = new Position(section: $section, anchor: $anchor, priority: $priority);
         return $this;
     }
 
     public function singlePosition(string $section = 'more-info', string $anchor = 'end', int $priority = 10): static {
-        $this->_singlePosition = new Position($section, $anchor, $priority);
+        $this->_singlePosition = new Position(section: $section, anchor: $anchor, priority: $priority);
         return $this;
     }
 

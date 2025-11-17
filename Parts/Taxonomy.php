@@ -45,12 +45,12 @@ class Taxonomy extends Part
 
     protected function getDefaultEditPosition(): Position
     {
-        return new Position('aside', 'begin');
+        return new Position(section: 'aside', anchor: 'begin');
     }
 
     protected function getDefaultSinglePosition(): Position
     {
-        return new Position('aside', 'begin');
+        return new Position(section: 'aside', anchor: 'begin');
     }
 
     public function getSubParts(): array

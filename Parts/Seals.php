@@ -4,12 +4,19 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
 use MapasCulturais\App;
-use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
 
 class Seals extends Part
 {
+    use Traits\PartPosition;
+
+    protected function getDefaultSinglePosition(): Position
+    {
+        return new Position(section: 'container', anchor: 'begin');
+    }
+
     public function getSubParts(): array
     {
         return [
@@ -21,7 +28,7 @@ class Seals extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.single.tab-info--container):begin", function () {
+        $this->singleTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/single/seals');
         });

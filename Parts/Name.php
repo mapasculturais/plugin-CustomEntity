@@ -4,6 +4,8 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Parts\Traits as PartTraits;
+use CustomEntity\Position;
 use CustomEntity\Traits;
 use MapasCulturais\App;
 use MapasCulturais\Entity as MapasEntity;
@@ -12,6 +14,8 @@ use MapasCulturais\Themes\BaseV2\Theme;
 
 class Name extends Part
 {
+    use PartTraits\PartPosition;
+
     protected ?string $fieldType = null;
     protected array $options = [];
     protected array $optionsOrder = [];
@@ -61,6 +65,11 @@ class Name extends Part
         return $this;
     }
 
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'main', anchor: 'begin');
+    }
+
     public function getEntityTraits(): array
     {
         return [
@@ -82,7 +91,7 @@ class Name extends Part
         $app = App::i();
         $self = $this;
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--main):begin", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/name');
         });

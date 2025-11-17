@@ -25,12 +25,12 @@ class GeoLocation extends Part
 
     protected function getDefaultEditPosition(): Position
     {
-        return new Position('more-info', 'begin');
+        return new Position(section: 'more-info', anchor: 'begin');
     }
 
     protected function getDefaultSinglePosition(): Position
     {
-        return new Position('more-info', 'begin');
+        return new Position(section: 'more-info', anchor: 'begin');
     }
 
     public function getEntityTraits(): array

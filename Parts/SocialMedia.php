@@ -4,6 +4,7 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
+use CustomEntity\Position;
 use MapasCulturais\App;
 use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
@@ -11,6 +12,13 @@ use MapasCulturais\Utils;
 
 class SocialMedia extends Part
 {
+    use Traits\PartPosition;
+
+    protected function getDefaultEditPosition(): Position
+    {
+        return new Position(section: 'aside', anchor: 'begin');
+    }
+
     public function getSubParts(): array
     {
         return [
@@ -152,7 +160,7 @@ class SocialMedia extends Part
     {
         $app = App::i();
 
-        $app->hook("template({$entity_definition->slug}.edit.tab-info--aside):begin", function () {
+        $this->editTemplateHook($entity_definition, function () {
             /** @var Theme $this */
             $this->part('custom-entity/edit/social-media');
         });
