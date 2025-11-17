@@ -4,14 +4,13 @@ namespace CustomEntity\Parts;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
-use CustomEntity\Traits\PartPosition;
 use MapasCulturais\Definitions\FileGroup;
 use MapasCulturais\i;
 use MapasCulturais\Themes\BaseV2\Theme;
 
 class Downloads extends Part
 {
-    use PartPosition;
+    use Traits\PartPosition;
 
     public function getSubParts(): array
     {

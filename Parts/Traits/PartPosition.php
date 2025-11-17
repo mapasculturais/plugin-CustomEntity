@@ -1,6 +1,6 @@
 <?php
 
-namespace CustomEntity\Traits;
+namespace CustomEntity\Parts\Traits;
 
 use CustomEntity\EntityDefinition;
 use CustomEntity\Position;

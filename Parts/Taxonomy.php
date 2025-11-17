@@ -5,7 +5,6 @@ namespace CustomEntity\Parts;
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
 use CustomEntity\Position;
-use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\Taxonomy as DefinitionsTaxonomy;
 use MapasCulturais\Themes\BaseV2\Theme;
@@ -14,7 +13,7 @@ use MapasCulturais\Themes\BaseV2\Theme;
 class Taxonomy extends Part
 {
     use Traits\Keywords;
-    use PartPosition;
+    use Traits\PartPosition;
 
     public readonly string $taxonomyDescription;
     protected array $restrictedTerms = [];
@@ -134,7 +133,7 @@ class Taxonomy extends Part
                         WITH
                             {$t_alias}.taxonomy = '$taxonomy_slug'";
             });
-            
+
             $this->keywordWhere($entity_definition, function (&$where, $keyword, $alias) use ($t_alias, $self) {
                 /** @var \MapasCulturais\Repository $this */
                 /** @var Taxonomy $self */

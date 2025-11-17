@@ -5,14 +5,13 @@ namespace CustomEntity\Parts;
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
 use CustomEntity\Position;
-use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\Definitions\Metadata as MetadataDefinition;
 
 class MetadataField extends Part
 {
     use Traits\Keywords;
-    use PartPosition;
+    use Traits\PartPosition;
 
     protected ?MetadataDefinition $definition = null;
     protected array $config;
@@ -177,7 +176,7 @@ class MetadataField extends Part
             $this->keywordJoin($entity_definition, function (&$joins, $keyword, $alias) use($meta_alias, $meta_key) {
                 $joins .= "\n LEFT JOIN e.__metadata {$meta_alias} WITH {$meta_alias}.key = '{$meta_key}'";
             });
-            
+
             $this->keywordWhere($entity_definition, function (&$where, $keyword, $alias) use ($meta_alias, $self) {
                 $alias = ':' . $alias;
                 $entity_side = "{$meta_alias}.value";
@@ -193,7 +192,7 @@ class MetadataField extends Part
                 }
 
                 $where .= "\n OR $entity_side LIKE $alias";
-                
+
             });
         }
     }

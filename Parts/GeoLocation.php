@@ -5,7 +5,6 @@ namespace CustomEntity\Parts;
 use CustomEntity\EntityDefinition;
 use CustomEntity\Part;
 use CustomEntity\Position;
-use CustomEntity\Traits\PartPosition;
 use MapasCulturais\App;
 use MapasCulturais\i;
 use MapasCulturais\Traits as MapasTraits;
@@ -13,7 +12,7 @@ use MapasCulturais\Types\GeoPoint;
 
 class GeoLocation extends Part
 {
-    use PartPosition;
+    use Traits\PartPosition;
 
     protected bool $showLatLongFields = false;
 
