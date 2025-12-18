@@ -1,0 +1,1 @@
+Obs: Esse plugin deve ser inicializado antes dos plugins que utilizem suas entidades
